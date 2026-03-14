@@ -12,7 +12,14 @@
     "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2,
-    "includes": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.json"]
+    "includes": [
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.json",
+      "!drizzle/**"
+    ]
   },
   "linter": {
     "enabled": true,
