@@ -7,7 +7,12 @@ Next.js app to roast your code. Paste code, get brutally honest feedback.
 - Tailwind CSS v4 (CSS variables in `@theme inline`)
 - tailwind-variants for component variants
 - Radix UI (toggle)
-- Shiki for syntax highlighting
+- Shiki for syntax highlighting (client-side)
+- highlight.js for language auto-detection
+
+## Dependencies
+- `shiki` - syntax highlighting
+- `highlight.js` - language detection
 
 ## Commands
 ```bash
@@ -31,3 +36,14 @@ Located in `src/components/ui/`. All use composition pattern:
 - Use `forwardRef` for interactive components
 - Props extend native HTML attributes
 - Use `tv()` from tailwind-variants for variants
+
+## Hooks
+Located in `src/hooks/`:
+- `useShikiHighlighter` - Shiki client-side singleton with JS engine
+- `useLanguageDetection` - Auto-detect language via highlight.js (300ms debounce)
+
+## Code Editor
+Textarea overlay architecture:
+- Textarea (z-index 2) - transparent, receives input
+- Div (z-index 1) - renders Shiki-highlighted HTML
+- Scroll sync between both elements

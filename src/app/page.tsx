@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CodeInput } from "@/components/ui/code-input";
+import { CodeEditor } from "@/components/ui/code-editor";
 import { LeaderboardTable } from "@/components/ui/leaderboard-table";
 import { StatsBarData } from "@/components/ui/stats-bar";
 import { Toggle } from "@/components/ui/toggle";
@@ -36,8 +36,8 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Code Input */}
-      <CodeInput value={code} onChange={setCode} />
+      {/* Code Editor */}
+      <CodeEditor value={code} onChange={setCode} />
 
       {/* Actions Bar */}
       <section className="flex items-center justify-between">
