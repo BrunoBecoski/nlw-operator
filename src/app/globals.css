@@ -14,6 +14,7 @@
 
 @theme inline {
   --font-mono: var(--font-mono);
+  --font-mono-secondary: var(--font-mono-secondary);
 
   /* Accent Colors */
   --color-accent-green: #22c55e;
@@ -47,13 +48,13 @@
 
 @media (prefers-color-scheme: dark) {
   @theme inline {
-    --color-text-primary: #ededed;
-    --color-text-secondary: #9ca3af;
-    --color-text-tertiary: #6b7280;
-    --color-border-primary: #374151;
+    --color-text-primary: #e5e5e5;
+    --color-text-secondary: #a3a3a3;
+    --color-text-tertiary: #737373;
+    --color-border-primary: #1f1f1f;
     --color-bg-page: #0a0a0a;
-    --color-bg-surface: #111827;
-    --color-bg-input: #111827;
+    --color-bg-surface: #0f0f0f;
+    --color-bg-input: #111111;
   }
 }
 

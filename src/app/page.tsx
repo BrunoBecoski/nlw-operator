@@ -1,3 +1,89 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { CodeInput } from "@/components/ui/code-input";
+import { LeaderboardTable } from "@/components/ui/leaderboard-table";
+import { StatsBarData } from "@/components/ui/stats-bar";
+import { Toggle } from "@/components/ui/toggle";
+
+const mockLeaderboard = [
+  { rank: 1, code: "function calculateTotal(items) {...}", score: 1 },
+  { rank: 2, code: "const result = arr.map(x => x * 2);", score: 2 },
+  { rank: 3, code: "for(var i=0; i<len; i++) {...}", score: 3 },
+];
+
 export default function Home() {
-  return null;
+  const [roastMode, setRoastMode] = useState(false);
+  const [code, setCode] = useState("");
+
+  return (
+    <div className="w-full max-w-4xl mx-auto px-10 py-16 flex flex-col gap-12">
+      {/* Hero Section */}
+      <section className="flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-4xl font-bold text-accent-green">
+            &gt;
+          </span>
+          <h1 className="font-mono text-4xl font-bold text-text-primary">
+            paste your code. get roasted.
+          </h1>
+        </div>
+        <p className="font-mono text-sm text-text-secondary">
+          {
+            "// drop your code below and we'll rate it — brutally honest or full roast mode"
+          }
+        </p>
+      </section>
+
+      {/* Code Input */}
+      <CodeInput value={code} onChange={setCode} />
+
+      {/* Actions Bar */}
+      <section className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Toggle
+            label="roast mode"
+            pressed={roastMode}
+            onPressedChange={setRoastMode}
+          />
+          <span className="font-mono text-xs text-text-tertiary">
+            {"// maximum sarcasm enabled"}
+          </span>
+        </div>
+        <Button>$ roast_my_code</Button>
+      </section>
+
+      {/* Footer Stats */}
+      <StatsBarData codesRoasted={2847} avgScore={4.2} />
+
+      {/* Leaderboard Preview */}
+      <section className="flex flex-col gap-6">
+        <div className="flex items-center justify-between">
+          <h2 className="font-mono text-lg font-medium text-text-primary">
+            Top 3
+          </h2>
+          <a
+            href="/leaderboard"
+            className="font-mono text-sm text-text-secondary hover:text-text-primary px-3 py-1.5 border border-border-primary rounded-md transition-colors"
+          >
+            view all &gt;&gt;
+          </a>
+        </div>
+        <p className="font-mono text-xs text-text-tertiary">
+          {"// the worst code on the internet, ranked by shame"}
+        </p>
+
+        <LeaderboardTable
+          items={mockLeaderboard}
+          maxScore={10}
+          totalCount={2847}
+          showDenominator={false}
+        />
+      </section>
+
+      {/* Bottom Spacer */}
+      <div className="h-16" />
+    </div>
+  );
 }
