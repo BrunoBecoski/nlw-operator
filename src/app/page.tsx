@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import StatsBar from "@/components/stats-bar";
 import { Button } from "@/components/ui/button";
 import { CodeEditor } from "@/components/ui/code-editor";
 import { LeaderboardTable } from "@/components/ui/leaderboard-table";
-import { StatsBarData } from "@/components/ui/stats-bar";
 import { Toggle } from "@/components/ui/toggle";
 
 const mockLeaderboard = [
@@ -55,7 +55,7 @@ export default function Home() {
       </section>
 
       {/* Footer Stats */}
-      <StatsBarData codesRoasted={2847} avgScore={4.2} />
+      <StatsBar />
 
       {/* Leaderboard Preview */}
       <section className="flex flex-col gap-6">

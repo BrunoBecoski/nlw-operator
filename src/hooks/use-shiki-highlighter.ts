@@ -1,8 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { createHighlighterCore, type HighlighterCore } from "shiki/bundle/web";
-import { createJavaScriptRawEngine } from "shiki/engine/javascript";
+import {
+  bundledLanguages,
+  createHighlighterCore,
+  type HighlighterCore,
+} from "shiki/bundle/web";
+import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 
 let shikiInstance: HighlighterCore | null = null;
 
@@ -29,16 +33,14 @@ export function useShikiHighlighter(): UseShikiHighlighterResult {
 
     async function initShiki() {
       try {
-        shikiInstance = await createHighlighterCore({
+        const highlighter = await createHighlighterCore({
           themes: [await import("shiki/themes/vesper.mjs")],
-          langs: [
-            await import("shiki/langs/javascript.mjs"),
-            await import("shiki/langs/typescript.mjs"),
-          ],
-          engine: createJavaScriptRawEngine(),
+          langs: [bundledLanguages.javascript, bundledLanguages.typescript],
+          engine: createJavaScriptRegexEngine(),
         });
 
-        highlighterRef.current = shikiInstance;
+        shikiInstance = highlighter;
+        highlighterRef.current = highlighter;
         setIsReady(true);
       } catch (error) {
         console.error("Failed to initialize Shiki:", error);
@@ -55,9 +57,12 @@ export function useShikiHighlighter(): UseShikiHighlighterResult {
       }
 
       try {
-        const langModule = await import(`shiki/langs/${lang}.mjs`);
-        await shikiInstance?.loadLanguage(langModule);
-        setLoadedLanguages((prev) => new Set([...prev, lang]));
+        const langModule =
+          bundledLanguages[lang as keyof typeof bundledLanguages];
+        if (langModule) {
+          await shikiInstance?.loadLanguage(langModule);
+          setLoadedLanguages((prev) => new Set([...prev, lang]));
+        }
       } catch (error) {
         console.error(`Failed to load language ${lang}:`, error);
       }

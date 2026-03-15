@@ -1,5 +1,7 @@
-import { codeToHtml } from "shiki";
+"use client";
+
 import { tv } from "tailwind-variants";
+import { useShikiHighlighter } from "@/hooks/use-shiki-highlighter";
 
 export interface CodeBlockContentProps {
   code: string;
@@ -10,14 +12,13 @@ const codeBlockContent = tv({
   base: "bg-bg-input p-3 overflow-x-auto",
 });
 
-export async function CodeBlockContent({
+export function CodeBlockContent({
   code,
   lang = "javascript",
 }: CodeBlockContentProps) {
-  const html = await codeToHtml(code, {
-    lang,
-    theme: "vesper",
-  });
+  const { highlight, isReady } = useShikiHighlighter();
+
+  const html = isReady ? highlight(code, lang) : "";
 
   return (
     <div
