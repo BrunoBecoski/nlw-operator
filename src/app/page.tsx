@@ -1,17 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import ShameLeaderboard from "@/components/shame-leaderboard";
 import StatsBar from "@/components/stats-bar";
 import { Button } from "@/components/ui/button";
 import { CodeEditor } from "@/components/ui/code-editor";
-import { LeaderboardTable } from "@/components/ui/leaderboard-table";
 import { Toggle } from "@/components/ui/toggle";
-
-const mockLeaderboard = [
-  { rank: 1, code: "function calculateTotal(items) {...}", score: 1 },
-  { rank: 2, code: "const result = arr.map(x => x * 2);", score: 2 },
-  { rank: 3, code: "for(var i=0; i<len; i++) {...}", score: 3 },
-];
 
 export default function Home() {
   const [roastMode, setRoastMode] = useState(false);
@@ -74,12 +68,7 @@ export default function Home() {
           {"// the worst code on the internet, ranked by shame"}
         </p>
 
-        <LeaderboardTable
-          items={mockLeaderboard}
-          maxScore={10}
-          totalCount={2847}
-          showDenominator={false}
-        />
+        <ShameLeaderboard />
       </section>
 
       {/* Bottom Spacer */}

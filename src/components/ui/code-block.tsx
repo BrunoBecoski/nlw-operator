@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { tv } from "tailwind-variants";
 import { useShikiHighlighter } from "@/hooks/use-shiki-highlighter";
 
@@ -17,8 +18,13 @@ export function CodeBlockContent({
   lang = "javascript",
 }: CodeBlockContentProps) {
   const { highlight, isReady } = useShikiHighlighter();
+  const [html, setHtml] = useState("");
 
-  const html = isReady ? highlight(code, lang) : "";
+  useEffect(() => {
+    if (isReady && code) {
+      highlight(code, lang).then(setHtml);
+    }
+  }, [code, lang, isReady, highlight]);
 
   return (
     <div

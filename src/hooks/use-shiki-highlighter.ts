@@ -5,23 +5,60 @@ import {
   bundledLanguages,
   createHighlighterCore,
   type HighlighterCore,
+  type LanguageInput,
 } from "shiki/bundle/web";
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 
 let shikiInstance: HighlighterCore | null = null;
 
 export interface UseShikiHighlighterResult {
-  highlight: (code: string, lang: string) => string;
+  highlight: (code: string, lang: string) => Promise<string>;
   isReady: boolean;
-  loadLanguage: (lang: string) => Promise<void>;
-  loadedLanguages: Set<string>;
+}
+
+const SUPPORTED_LANGUAGES = [
+  "javascript",
+  "typescript",
+  "python",
+  "go",
+  "rust",
+  "java",
+  "cpp",
+  "c",
+  "ruby",
+  "php",
+  "swift",
+  "kotlin",
+  "html",
+  "css",
+  "json",
+  "yaml",
+  "bash",
+  "sql",
+] as const;
+
+const languageAliases: Record<string, string> = {
+  js: "javascript",
+  ts: "typescript",
+  py: "python",
+  rb: "ruby",
+  sh: "bash",
+  yml: "yaml",
+};
+
+function normalizeLang(lang: string): string {
+  const normalized = lang.toLowerCase();
+  return languageAliases[normalized] || normalized;
+}
+
+function isLangSupported(lang: string): boolean {
+  return SUPPORTED_LANGUAGES.includes(
+    lang as (typeof SUPPORTED_LANGUAGES)[number],
+  );
 }
 
 export function useShikiHighlighter(): UseShikiHighlighterResult {
   const [isReady, setIsReady] = useState(false);
-  const [loadedLanguages, setLoadedLanguages] = useState<Set<string>>(
-    new Set(["javascript", "typescript"]),
-  );
   const highlighterRef = useRef<HighlighterCore | null>(null);
 
   useEffect(() => {
@@ -31,72 +68,65 @@ export function useShikiHighlighter(): UseShikiHighlighterResult {
       return;
     }
 
-    async function initShiki() {
+    async function init() {
       try {
+        const langs: LanguageInput[] = [];
+
+        for (const lang of SUPPORTED_LANGUAGES) {
+          const mod = (bundledLanguages as Record<string, LanguageInput>)[lang];
+          if (mod) langs.push(mod);
+        }
+
+        if (langs.length === 0) {
+          langs.push(bundledLanguages.javascript);
+        }
+
         const highlighter = await createHighlighterCore({
           themes: [await import("shiki/themes/vesper.mjs")],
-          langs: [bundledLanguages.javascript, bundledLanguages.typescript],
+          langs,
           engine: createJavaScriptRegexEngine(),
         });
 
         shikiInstance = highlighter;
         highlighterRef.current = highlighter;
         setIsReady(true);
-      } catch (error) {
-        console.error("Failed to initialize Shiki:", error);
+      } catch (err) {
+        console.error("Shiki init failed:", err);
       }
     }
 
-    initShiki();
+    init();
   }, []);
 
-  const loadLanguage = useCallback(
-    async (lang: string) => {
-      if (loadedLanguages.has(lang)) {
-        return;
+  const highlight = useCallback(
+    async (code: string, lang: string): Promise<string> => {
+      if (!code || !highlighterRef.current) {
+        return escapeHtml(code);
+      }
+
+      const normalized = normalizeLang(lang);
+
+      if (!isLangSupported(normalized)) {
+        return escapeHtml(code);
       }
 
       try {
-        const langModule =
-          bundledLanguages[lang as keyof typeof bundledLanguages];
-        if (langModule) {
-          await shikiInstance?.loadLanguage(langModule);
-          setLoadedLanguages((prev) => new Set([...prev, lang]));
-        }
-      } catch (error) {
-        console.error(`Failed to load language ${lang}:`, error);
+        return highlighterRef.current.codeToHtml(code, {
+          lang: normalized,
+          theme: "vesper",
+        });
+      } catch {
+        return escapeHtml(code);
       }
     },
-    [loadedLanguages],
+    [],
   );
 
-  const highlight = useCallback((code: string, lang: string): string => {
-    if (!highlighterRef.current || !code) {
-      return "";
-    }
-
-    try {
-      const html = highlighterRef.current.codeToHtml(code, {
-        lang,
-        theme: "vesper",
-      });
-
-      return html;
-    } catch (error) {
-      console.error(`Failed to highlight code:`, error);
-      return escapeHtml(code);
-    }
-  }, []);
-
-  return {
-    highlight,
-    isReady,
-    loadLanguage,
-    loadedLanguages,
-  };
+  return { highlight, isReady };
 }
 
 function escapeHtml(text: string): string {
+  if (!text) return "";
   return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

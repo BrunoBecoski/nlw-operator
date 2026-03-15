@@ -9,10 +9,17 @@ Next.js app to roast your code. Paste code, get brutally honest feedback.
 - Radix UI (toggle)
 - Shiki for syntax highlighting (client-side)
 - highlight.js for language auto-detection
+- tRPC v11 with TanStack React Query
+- Drizzle ORM with PostgreSQL
+- NumberFlow for number animations
 
 ## Dependencies
 - `shiki` - syntax highlighting
 - `highlight.js` - language detection
+- `@trpc/server`, `@trpc/client`, `@trpc/tanstack-react-query` - type-safe API layer
+- `@tanstack/react-query` - data fetching and caching
+- `@number-flow/react` - animated numbers
+- `zod` - input validation
 
 ## Commands
 ```bash
@@ -36,6 +43,9 @@ Located in `src/components/ui/`. All use composition pattern:
 - Use `forwardRef` for interactive components
 - Props extend native HTML attributes
 - Use `tv()` from tailwind-variants for variants
+
+## tRPC
+See `src/trpc/AGENTS.md` for tRPC-specific patterns.
 
 ## Hooks
 Located in `src/hooks/`:

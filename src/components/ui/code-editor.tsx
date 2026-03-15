@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useCallback, useEffect, useRef } from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { tv } from "tailwind-variants";
 import { useLanguageDetection } from "@/hooks/use-language-detection";
 import { useShikiHighlighter } from "@/hooks/use-shiki-highlighter";
@@ -208,13 +208,17 @@ export function CodeEditor({
 
   const { highlight, isReady } = useShikiHighlighter();
   const { detectedLanguage } = useLanguageDetection(value);
+  const [highlightedHtml, setHighlightedHtml] = useState("");
 
   const effectiveLanguage = manualLanguage
     ? LANGUAGES[manualLanguage].shikiId
     : detectedLangProp || "javascript";
 
-  const highlightedHtml =
-    isReady && value ? highlight(value, effectiveLanguage) : "";
+  useEffect(() => {
+    if (isReady && value) {
+      highlight(value, effectiveLanguage).then(setHighlightedHtml);
+    }
+  }, [value, effectiveLanguage, isReady, highlight]);
 
   const handleScroll = useCallback((e: React.UIEvent<HTMLTextAreaElement>) => {
     if (highlightRef.current) {
