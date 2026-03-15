@@ -1,4 +1,11 @@
 import { tv } from "tailwind-variants";
+import {
+  CodeBlockContent,
+  CodeBlockDots,
+  CodeBlockFilename,
+  CodeBlockHeader,
+  CodeBlockRoot,
+} from "@/components/ui/code-block";
 import { ScoreRing } from "@/components/ui/score-ring";
 
 const leaderboardRoot = tv({
@@ -100,6 +107,64 @@ export interface LeaderboardItem {
   rank: number;
   code: string;
   score: number;
+  lang?: string;
+}
+
+const leaderboardEntryRow = tv({
+  base: "flex flex-col border border-border-primary rounded-md overflow-hidden",
+});
+
+export interface LeaderboardEntryRowProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
+
+export function LeaderboardEntryRow({
+  className,
+  children,
+  ...props
+}: LeaderboardEntryRowProps) {
+  return (
+    <div className={leaderboardEntryRow({ className })} {...props}>
+      {children}
+    </div>
+  );
+}
+
+export interface LeaderboardMetaRowProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
+
+const leaderboardMetaRow = tv({
+  base: "flex items-center justify-between h-12 px-5 border-b border-border-primary bg-bg-surface",
+});
+
+export function LeaderboardMetaRow({
+  className,
+  children,
+  ...props
+}: LeaderboardMetaRowProps) {
+  return (
+    <div className={leaderboardMetaRow({ className })} {...props}>
+      {children}
+    </div>
+  );
+}
+
+export interface LeaderboardCodeCellProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
+
+const leaderboardCodeCell = tv({
+  base: "",
+});
+
+export function LeaderboardCodeCell({
+  className,
+  children,
+  ...props
+}: LeaderboardCodeCellProps) {
+  return (
+    <div className={leaderboardCodeCell({ className })} {...props}>
+      {children}
+    </div>
+  );
 }
 
 export interface LeaderboardTableProps {
@@ -116,32 +181,32 @@ export function LeaderboardTable({
   showDenominator = false,
 }: LeaderboardTableProps) {
   return (
-    <LeaderboardRoot>
-      <LeaderboardHeader>
-        <LeaderboardCell className="w-12 text-xs text-text-tertiary">
-          rank
-        </LeaderboardCell>
-        <LeaderboardCell className="flex-1 text-xs text-text-tertiary">
-          code preview
-        </LeaderboardCell>
-        <LeaderboardCell className="text-xs text-text-tertiary">
-          score
-        </LeaderboardCell>
-      </LeaderboardHeader>
+    <div className="flex flex-col gap-5">
       {items.map((item) => (
-        <LeaderboardRow key={item.rank}>
-          <LeaderboardCell className="w-12 text-sm text-text-secondary">
-            #{item.rank}
-          </LeaderboardCell>
-          <LeaderboardCell className="flex-1 text-sm text-text-secondary truncate pr-4">
-            {item.code}
-          </LeaderboardCell>
-          <ScoreRing
-            score={item.score}
-            maxScore={maxScore}
-            showDenominator={showDenominator}
-          />
-        </LeaderboardRow>
+        <LeaderboardEntryRow key={item.rank}>
+          <LeaderboardMetaRow>
+            <span className="font-mono text-sm text-text-secondary">
+              #{item.rank}
+            </span>
+            <ScoreRing
+              score={item.score}
+              maxScore={maxScore}
+              showDenominator={showDenominator}
+            />
+          </LeaderboardMetaRow>
+          <LeaderboardCodeCell>
+            <CodeBlockRoot>
+              <CodeBlockHeader>
+                <CodeBlockDots />
+                <CodeBlockFilename lang={item.lang || "js"} />
+              </CodeBlockHeader>
+              <CodeBlockContent
+                code={item.code}
+                lang={item.lang || "javascript"}
+              />
+            </CodeBlockRoot>
+          </LeaderboardCodeCell>
+        </LeaderboardEntryRow>
       ))}
       {totalCount && (
         <LeaderboardFooter>
@@ -149,6 +214,6 @@ export function LeaderboardTable({
           &gt;&gt;
         </LeaderboardFooter>
       )}
-    </LeaderboardRoot>
+    </div>
   );
 }

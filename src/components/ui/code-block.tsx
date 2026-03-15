@@ -111,10 +111,6 @@ export interface CodeBlockProps {
 export function CodeBlock({ code, lang = "javascript" }: CodeBlockProps) {
   return (
     <CodeBlockRoot>
-      <CodeBlockHeader>
-        <CodeBlockDots />
-        <CodeBlockFilename lang={lang} />
-      </CodeBlockHeader>
       <CodeBlockContent code={code} lang={lang} />
     </CodeBlockRoot>
   );
