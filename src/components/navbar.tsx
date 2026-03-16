@@ -6,7 +6,7 @@ const navbar = tv({
 });
 
 const logo = tv({
-  base: "flex items-center gap-2",
+  base: "flex items-center gap-2 cursor-pointer",
 });
 
 const navLink = tv({
@@ -18,14 +18,14 @@ export interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function Navbar({ className, ...props }: NavbarProps) {
   return (
     <nav className={navbar({ className })} {...props}>
-      <div className={logo()}>
+      <Link href="/" className={logo()}>
         <span className="font-mono text-xl font-bold text-accent-green">
           &gt;
         </span>
         <span className="font-mono text-lg font-medium text-text-primary">
           devroast
         </span>
-      </div>
+      </Link>
       <Link href="/leaderboard" className={navLink()}>
         leaderboard
       </Link>

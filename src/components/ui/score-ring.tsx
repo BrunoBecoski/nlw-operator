@@ -1,19 +1,31 @@
 import { tv } from "tailwind-variants";
 
 const scoreRingRoot = tv({
-  base: "relative inline-flex items-center justify-center w-[180px] h-[180px]",
+  base: "relative inline-block",
+  variants: {
+    size: {
+      sm: "w-14 h-14",
+      md: "w-[180px] h-[180px]",
+    },
+  },
+  defaultVariants: {
+    size: "md",
+  },
 });
 
 export interface ScoreRingRootProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  size?: "sm" | "md";
+}
 
 export function ScoreRingRoot({
   className,
   children,
+  size = "md",
   ...props
 }: ScoreRingRootProps) {
   return (
-    <div className={scoreRingRoot({ className })} {...props}>
+    <div className={scoreRingRoot({ size, className })} {...props}>
       {children}
     </div>
   );
@@ -23,18 +35,30 @@ const scoreRingTrack = tv({
   base: "absolute border-4 border-border-primary rounded-full",
 });
 
-export interface ScoreRingTrackProps
-  extends React.HTMLAttributes<SVGCircleElement> {}
+const TRACK_SIZES = {
+  sm: { cx: 28, cy: 28, r: 24, strokeWidth: 2 },
+  md: { cx: 90, cy: 90, r: 70, strokeWidth: 4 },
+};
 
-export function ScoreRingTrack({ className, ...props }: ScoreRingTrackProps) {
+export interface ScoreRingTrackProps
+  extends React.HTMLAttributes<SVGCircleElement> {
+  size?: "sm" | "md";
+}
+
+export function ScoreRingTrack({
+  className,
+  size = "md",
+  ...props
+}: ScoreRingTrackProps) {
+  const trackVars = TRACK_SIZES[size];
   return (
     <circle
-      cx="90"
-      cy="90"
-      r="70"
+      cx={trackVars.cx}
+      cy={trackVars.cy}
+      r={trackVars.r}
       fill="none"
       stroke="currentColor"
-      strokeWidth="4"
+      strokeWidth={trackVars.strokeWidth}
       className={scoreRingTrack({ className })}
       {...props}
     />
@@ -45,20 +69,28 @@ const scoreRingIndicator = tv({
   base: "",
 });
 
+const INDICATOR_SIZES = {
+  sm: { cx: 28, cy: 28, r: 24, strokeWidth: 2 },
+  md: { cx: 90, cy: 90, r: 70, strokeWidth: 4 },
+};
+
 export interface ScoreRingIndicatorProps
   extends React.HTMLAttributes<SVGCircleElement> {
   score: number;
   maxScore?: number;
+  size?: "sm" | "md";
 }
 
 export function ScoreRingIndicator({
   className,
   score,
   maxScore = 10,
+  size = "md",
   ...props
 }: ScoreRingIndicatorProps) {
   const percentage = (score / maxScore) * 100;
-  const circumference = 2 * Math.PI * 70;
+  const sizeVars = INDICATOR_SIZES[size];
+  const circumference = 2 * Math.PI * sizeVars.r;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   const scoreColor =
@@ -70,12 +102,12 @@ export function ScoreRingIndicator({
 
   return (
     <circle
-      cx="90"
-      cy="90"
-      r="70"
+      cx={sizeVars.cx}
+      cy={sizeVars.cy}
+      r={sizeVars.r}
       fill="none"
       stroke="currentColor"
-      strokeWidth="4"
+      strokeWidth={sizeVars.strokeWidth}
       strokeLinecap="round"
       strokeDasharray={circumference}
       strokeDashoffset={strokeDashoffset}
@@ -89,7 +121,7 @@ export function ScoreRingIndicator({
 }
 
 const scoreRingCenter = tv({
-  base: "absolute inset-0 flex flex-col items-center justify-center gap-1",
+  base: "absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-1",
 });
 
 export interface ScoreRingCenterProps
@@ -108,42 +140,58 @@ export function ScoreRingCenter({
 }
 
 const scoreRingValue = tv({
-  base: "text-5xl font-bold font-mono leading-none",
+  base: "font-bold font-mono leading-none",
+  variants: {
+    size: {
+      sm: "text-lg font-semibold",
+      md: "text-5xl",
+    },
+  },
 });
 
 export interface ScoreRingValueProps
   extends React.HTMLAttributes<HTMLSpanElement> {
   score: number;
+  size?: "sm" | "md";
 }
 
 export function ScoreRingValue({
   className,
   score,
+  size = "md",
   ...props
 }: ScoreRingValueProps) {
   return (
-    <span className={scoreRingValue({ className })} {...props}>
+    <span className={scoreRingValue({ size, className })} {...props}>
       {score}
     </span>
   );
 }
 
 const scoreRingLabel = tv({
-  base: "text-base font-mono text-text-tertiary",
+  base: "font-mono text-text-tertiary",
+  variants: {
+    size: {
+      sm: "text-[8px]",
+      md: "text-base",
+    },
+  },
 });
 
 export interface ScoreRingLabelProps
   extends React.HTMLAttributes<HTMLSpanElement> {
   maxScore?: number;
+  size?: "sm" | "md";
 }
 
 export function ScoreRingLabel({
   className,
   maxScore = 10,
+  size = "md",
   ...props
 }: ScoreRingLabelProps) {
   return (
-    <span className={scoreRingLabel({ className })} {...props}>
+    <span className={scoreRingLabel({ size, className })} {...props}>
       /{maxScore}
     </span>
   );
@@ -155,6 +203,7 @@ export interface ScoreRingProps extends React.HTMLAttributes<HTMLDivElement> {
   score: number;
   maxScore?: number;
   showDenominator?: boolean;
+  size?: "sm" | "md";
 }
 
 export function ScoreRing({
@@ -162,6 +211,7 @@ export function ScoreRing({
   score,
   maxScore = 10,
   showDenominator = true,
+  size = "md",
   ...props
 }: ScoreRingProps) {
   const scoreColor =
@@ -171,19 +221,21 @@ export function ScoreRing({
         ? "text-accent-amber"
         : "text-accent-green";
 
+  const viewBoxSize = size === "sm" ? "0 0 56 56" : "0 0 180 180";
+
   return (
-    <ScoreRingRoot className={className} {...props}>
+    <ScoreRingRoot size={size} className={className} {...props}>
       <svg
         className="absolute w-full h-full -rotate-90"
-        viewBox="0 0 180 180"
+        viewBox={viewBoxSize}
         aria-label={`Score: ${score} out of ${maxScore}`}
       >
-        <ScoreRingTrack />
-        <ScoreRingIndicator score={score} maxScore={maxScore} />
+        <ScoreRingTrack size={size} />
+        <ScoreRingIndicator size={size} score={score} maxScore={maxScore} />
       </svg>
       <ScoreRingCenter className={scoreColor}>
-        <ScoreRingValue score={score} />
-        {showDenominator && <ScoreRingLabel maxScore={maxScore} />}
+        <ScoreRingValue size={size} score={score} />
+        {showDenominator && <ScoreRingLabel size={size} maxScore={maxScore} />}
       </ScoreRingCenter>
     </ScoreRingRoot>
   );

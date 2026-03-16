@@ -77,7 +77,20 @@ function CodePreview({ code, lang }: { code: string; lang: string }) {
   );
 }
 
-export function LeaderboardFetcher() {
+interface LeaderboardFetcherProps {
+  initialData?: Array<{
+    id: string;
+    code: string;
+    score: number;
+    language: string;
+  }>;
+  initialTotalCount?: number;
+}
+
+export function LeaderboardFetcher({
+  initialData,
+  initialTotalCount,
+}: LeaderboardFetcherProps) {
   const trpc = useTRPC();
 
   const results = useQueries({
@@ -91,12 +104,12 @@ export function LeaderboardFetcher() {
 
   const isLoading = leaderboardResult.isLoading || totalCountResult.isLoading;
 
-  if (isLoading) {
+  if (isLoading && !initialData) {
     return <LeaderboardFetcherSkeleton />;
   }
 
-  const leaderboardData = leaderboardResult.data ?? [];
-  const totalCount = totalCountResult.data ?? 0;
+  const leaderboardData = leaderboardResult.data ?? initialData ?? [];
+  const totalCount = totalCountResult.data ?? initialTotalCount ?? 0;
 
   const items: LeaderboardItem[] = leaderboardData.map((entry, index) => ({
     rank: index + 1,
@@ -120,6 +133,7 @@ export function LeaderboardFetcher() {
               score={item.score}
               maxScore={10}
               showDenominator={false}
+              size="sm"
             />
           </LeaderboardMetaRow>
           <LeaderboardCodeCell>

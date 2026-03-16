@@ -21,6 +21,29 @@ export const leaderboardRouter = createTRPCRouter({
       return entries;
     }),
 
+  getLeaderboard: baseProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(20),
+        offset: z.number().min(0).default(0),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const entries = await ctx.db
+        .select({
+          id: roasts.id,
+          code: roasts.code,
+          score: roasts.score,
+          language: roasts.language,
+        })
+        .from(roasts)
+        .orderBy(asc(roasts.score))
+        .limit(input.limit)
+        .offset(input.offset);
+
+      return entries;
+    }),
+
   getTotalCount: baseProcedure.query(async ({ ctx }) => {
     const [result] = await ctx.db.select({ count: count() }).from(roasts);
 
