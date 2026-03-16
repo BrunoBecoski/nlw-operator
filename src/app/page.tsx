@@ -1,15 +1,35 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ShameLeaderboard from "@/components/shame-leaderboard";
 import StatsBar from "@/components/stats-bar";
 import { Button } from "@/components/ui/button";
 import { CodeEditor } from "@/components/ui/code-editor";
 import { Toggle } from "@/components/ui/toggle";
+import { useLanguageDetection } from "@/hooks/use-language-detection";
+import { useTRPC } from "@/trpc/client";
 
 export default function Home() {
-  const [roastMode, setRoastMode] = useState(false);
   const [code, setCode] = useState("");
+  const [roastMode, setRoastMode] = useState(true);
+  const [manualLanguage, setManualLanguage] = useState<string | null>(null);
+  const { detectedLanguage } = useLanguageDetection(code);
+
+  const resolvedLanguage = manualLanguage ?? detectedLanguage ?? "javascript";
+
+  const router = useRouter();
+  const trpc = useTRPC();
+  const createRoast = useMutation(
+    trpc.roast.create.mutationOptions({
+      onSuccess(data) {
+        router.push(`/roast/${data.id}`);
+      },
+    }),
+  );
+
+  const isDisabled = code.trim().length === 0 || createRoast.isPending;
 
   return (
     <div className="w-full max-w-4xl mx-auto px-10 py-16 flex flex-col gap-12">
@@ -31,21 +51,37 @@ export default function Home() {
       </section>
 
       {/* Code Editor */}
-      <CodeEditor value={code} onChange={setCode} />
+      <CodeEditor
+        value={code}
+        onChange={setCode}
+        language={resolvedLanguage as any}
+        onLanguageChange={setManualLanguage}
+      />
 
       {/* Actions Bar */}
       <section className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Toggle
-            label="roast mode"
             pressed={roastMode}
             onPressedChange={setRoastMode}
+            label="roast mode"
           />
           <span className="font-mono text-xs text-text-tertiary">
             {"// maximum sarcasm enabled"}
           </span>
         </div>
-        <Button>$ roast_my_code</Button>
+        <Button
+          disabled={isDisabled}
+          onClick={() =>
+            createRoast.mutate({
+              code,
+              language: resolvedLanguage,
+              roastMode,
+            })
+          }
+        >
+          {createRoast.isPending ? "$ roasting..." : "$ roast_my_code"}
+        </Button>
       </section>
 
       {/* Footer Stats */}

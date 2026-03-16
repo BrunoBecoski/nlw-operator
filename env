@@ -1,0 +1,3 @@
+DATABASE_URL=postgresql://devroast:devroast@localhost:5432/devroast
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+GOOGLE_GENERATIVE_AI_API_KEY=
