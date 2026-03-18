@@ -32,7 +32,7 @@ export function ScoreRingRoot({
 }
 
 const scoreRingTrack = tv({
-  base: "absolute border-4 border-border-primary rounded-full",
+  base: "absolute border-4 border-border-primary rounded-full text-text-tertiary",
 });
 
 const TRACK_SIZES = {
@@ -93,26 +93,19 @@ export function ScoreRingIndicator({
   const circumference = 2 * Math.PI * sizeVars.r;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
-  const scoreColor =
-    score < 4
-      ? "text-accent-red"
-      : score < 7
-        ? "text-accent-amber"
-        : "text-accent-green";
-
   return (
     <circle
       cx={sizeVars.cx}
       cy={sizeVars.cy}
       r={sizeVars.r}
       fill="none"
-      stroke="currentColor"
+      stroke="url(#ring-gradient)"
       strokeWidth={sizeVars.strokeWidth}
       strokeLinecap="round"
       strokeDasharray={circumference}
       strokeDashoffset={strokeDashoffset}
       className={scoreRingIndicator({
-        className: `${scoreColor} ${className || ""}`,
+        className: `${className || ""}`,
       })}
       style={{ transformOrigin: "center" }}
       {...props}
@@ -221,7 +214,17 @@ export function ScoreRing({
         ? "text-accent-amber"
         : "text-accent-green";
 
+  const transitionZone = 0.08;
+  const redEnd = 0.25 + transitionZone;
+  const orangeStart = 0.25 - transitionZone / 2;
+  const orangeEnd = 0.5 + transitionZone;
+  const yellowStart = 0.5 - transitionZone / 2;
+  const yellowEnd = 0.75 + transitionZone;
+  const greenStart = 0.75 - transitionZone / 2;
+
   const viewBoxSize = size === "sm" ? "0 0 56 56" : "0 0 180 180";
+  const percentage = (score / maxScore) * 100;
+  const circumference = 2 * Math.PI * (size === "sm" ? 24 : 70);
 
   return (
     <ScoreRingRoot size={size} className={className} {...props}>
@@ -231,7 +234,61 @@ export function ScoreRing({
         aria-label={`Score: ${score} out of ${maxScore}`}
       >
         <ScoreRingTrack size={size} />
-        <ScoreRingIndicator size={size} score={score} maxScore={maxScore} />
+        <g>
+          <circle
+            cx={size === "sm" ? 28 : 90}
+            cy={size === "sm" ? 28 : 90}
+            r={size === "sm" ? 24 : 70}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={size === "sm" ? 2 : 4}
+            strokeDasharray={`${(Math.min(percentage, redEnd * 100) / 100) * circumference} ${circumference}`}
+            className="text-accent-red"
+            strokeLinecap="round"
+          />
+          {percentage > orangeStart * 100 && (
+            <circle
+              cx={size === "sm" ? 28 : 90}
+              cy={size === "sm" ? 28 : 90}
+              r={size === "sm" ? 24 : 70}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={size === "sm" ? 2 : 4}
+              strokeDasharray={`${((Math.min(percentage, orangeEnd * 100) - orangeStart * 100) / 100) * circumference} ${circumference}`}
+              strokeDashoffset={`${-orangeStart * circumference}`}
+              className="text-orange-400"
+              strokeLinecap="round"
+            />
+          )}
+          {percentage > yellowStart * 100 && (
+            <circle
+              cx={size === "sm" ? 28 : 90}
+              cy={size === "sm" ? 28 : 90}
+              r={size === "sm" ? 24 : 70}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={size === "sm" ? 2 : 4}
+              strokeDasharray={`${((Math.min(percentage, yellowEnd * 100) - yellowStart * 100) / 100) * circumference} ${circumference}`}
+              strokeDashoffset={`${-yellowStart * circumference}`}
+              className="text-yellow-400"
+              strokeLinecap="round"
+            />
+          )}
+          {percentage > greenStart * 100 && (
+            <circle
+              cx={size === "sm" ? 28 : 90}
+              cy={size === "sm" ? 28 : 90}
+              r={size === "sm" ? 24 : 70}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={size === "sm" ? 2 : 4}
+              strokeDasharray={`${((percentage - greenStart * 100) / 100) * circumference} ${circumference}`}
+              strokeDashoffset={`${-greenStart * circumference}`}
+              className="text-accent-green"
+              strokeLinecap="round"
+            />
+          )}
+        </g>
       </svg>
       <ScoreRingCenter className={scoreColor}>
         <ScoreRingValue size={size} score={score} />
