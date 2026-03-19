@@ -89,3 +89,16 @@ body {
 .animate-collapse-up {
   animation: collapse-up 0.2s ease-out;
 }
+
+@keyframes needle-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-needle-pulse {
+  animation: needle-pulse 1s ease-in-out infinite;
+}

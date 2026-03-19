@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button, button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/ui/code-block";
 import { DiffLine } from "@/components/ui/diff-line";
+import { RadiationDial } from "@/components/ui/radiation-dial";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { Toggle } from "@/components/ui/toggle";
 
@@ -133,6 +134,21 @@ export default function ComponentsDemoPage() {
           <ScoreRing score={6} />
           <ScoreRing score={10} maxScore={10} />
           <ScoreRing score={8} maxScore={100} showDenominator={false} />
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">RadiationDial</h2>
+        <p className="text-gray-600">
+          Medidor estilo Geiger com zonas de perigo. Quanto menor a nota, mais
+          radioativo o código.
+        </p>
+
+        <div className="flex flex-wrap items-center gap-8">
+          <RadiationDial score={10} maxScore={10} />
+          <RadiationDial score={8.7} maxScore={10} />
+          <RadiationDial score={5.1} maxScore={10} />
+          <RadiationDial score={2} maxScore={10} />
         </div>
       </section>
     </div>
