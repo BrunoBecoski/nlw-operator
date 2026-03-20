@@ -16,8 +16,8 @@
   --font-mono: var(--font-mono);
   --font-mono-secondary: var(--font-mono-secondary);
 
-  /* Accent Colors */
-  --color-accent-green: #22c55e;
+  /* Accent Colors - Primary: Hazmat Yellow */
+  --color-accent-green: #c8ff00;
   --color-accent-red: #ef4444;
   --color-accent-amber: #f59e0b;
 
@@ -33,6 +33,14 @@
   --color-bg-page: #ffffff;
   --color-bg-surface: #f9fafb;
   --color-bg-input: #f9fafb;
+
+  /* Nuclear/Radiation Colors */
+  --color-neon-green: #39ff14;
+  --color-hazmat-yellow: #c8ff00;
+  --color-core-green: #00ff41;
+  --color-warning-orange: #ff6b00;
+  --color-radiation-purple: #9d00ff;
+  --color-bg-dark: #0d0d0d;
 
   /* Syntax Highlighting */
   --color-syn-keyword: #c084fc;
@@ -101,4 +109,33 @@ body {
 
 .animate-needle-pulse {
   animation: needle-pulse 1s ease-in-out infinite;
+}
+
+@keyframes hazmat-flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-nuclear-pulse {
+  animation: nuclear-pulse 2s ease-in-out infinite;
+}
+
+.animate-hazmat-flicker {
+  animation: hazmat-flicker 0.5s ease-in-out infinite;
+}
+
+.glow-neon {
+  box-shadow: 0 0 10px var(--color-accent-green), 0 0 20px var(--color-accent-green);
+}
+
+.glow-hazmat {
+  box-shadow: 0 0 10px var(--color-accent-green), 0 0 20px var(--color-accent-green);
+}
+
+.glow-green {
+  box-shadow: 0 0 10px var(--color-neon-green), 0 0 20px var(--color-neon-green);
 }

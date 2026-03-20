@@ -2,27 +2,17 @@ import { type ButtonHTMLAttributes, forwardRef } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const button = tv({
-  base: "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-green disabled:pointer-events-none disabled:opacity-50",
+  base: "inline-flex items-center justify-center whitespace-nowrap font-mono font-medium transition-all duration-200 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 uppercase tracking-wider text-xs cursor-pointer h-10 px-6 py-2 rounded-md",
   variants: {
     variant: {
-      default: "bg-accent-green text-black hover:bg-accent-green/90",
-      destructive: "bg-accent-red text-white hover:bg-accent-red/90",
+      hazmat:
+        "bg-accent-green text-black border border-accent-green/50 hover:shadow-[0_0_15px_var(--color-accent-green)] active:scale-95 focus-visible:ring-accent-green",
       outline:
-        "border border-border-primary bg-white text-text-secondary hover:bg-bg-surface",
-      secondary: "bg-bg-surface text-text-primary hover:bg-border-primary",
-      ghost: "hover:bg-bg-surface text-text-secondary",
-      link: "text-accent-green underline-offset-4 hover:underline",
-    },
-    size: {
-      default: "h-9 px-6 py-2",
-      sm: "h-8 rounded-md px-3 text-xs",
-      lg: "h-10 rounded-md px-8",
-      icon: "h-9 w-9",
+        "bg-transparent text-accent-green border-2 border-accent-green hover:shadow-[0_0_15px_var(--color-accent-green)] hover:bg-accent-green/10 active:scale-95 focus-visible:ring-accent-green",
     },
   },
   defaultVariants: {
-    variant: "default",
-    size: "default",
+    variant: "hazmat",
   },
 });
 
@@ -31,13 +21,9 @@ export interface ButtonProps
     VariantProps<typeof button> {}
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, ...props }, ref) => {
+  ({ className, variant, ...props }, ref) => {
     return (
-      <button
-        className={button({ variant, size, className })}
-        ref={ref}
-        {...props}
-      />
+      <button className={button({ variant, className })} ref={ref} {...props} />
     );
   },
 );

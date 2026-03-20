@@ -6,7 +6,7 @@ import {
   CodeBlockHeader,
   CodeBlockRoot,
 } from "@/components/ui/code-block";
-import { ScoreRing } from "@/components/ui/score-ring";
+import { RadiationDial } from "@/components/ui/radiation-dial";
 
 const leaderboardRoot = tv({
   base: "flex flex-col border border-border-primary rounded-md overflow-hidden",
@@ -188,11 +188,7 @@ export function LeaderboardTable({
             <span className="font-mono text-sm text-text-secondary">
               #{item.rank}
             </span>
-            <ScoreRing
-              score={item.score}
-              maxScore={maxScore}
-              showDenominator={showDenominator}
-            />
+            <RadiationDial score={item.score} maxScore={maxScore} />
           </LeaderboardMetaRow>
           <LeaderboardCodeCell>
             <CodeBlockRoot>

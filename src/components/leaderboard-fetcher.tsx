@@ -22,7 +22,7 @@ import {
   type LeaderboardItem,
   LeaderboardMetaRow,
 } from "@/components/ui/leaderboard-table";
-import { ScoreRing } from "@/components/ui/score-ring";
+import { RadiationDial } from "@/components/ui/radiation-dial";
 import { useTRPC } from "@/trpc/client";
 
 const MAX_PREVIEW_LINES = 3;
@@ -129,12 +129,7 @@ export function LeaderboardFetcher({
             >
               #{item.rank}
             </Link>
-            <ScoreRing
-              score={item.score}
-              maxScore={10}
-              showDenominator={false}
-              size="sm"
-            />
+            <RadiationDial score={item.score} maxScore={10} />
           </LeaderboardMetaRow>
           <LeaderboardCodeCell>
             <Link href={`/roast/${item.rank}`} className="block">

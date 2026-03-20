@@ -8,9 +8,9 @@ interface RadiationDialProps {
 type RadiationLevel = "safe" | "caution" | "danger";
 
 const ZONE_COLORS = {
-  safe: { fill: "#22c55e", glow: "rgba(34,197,94,0.8)" },
-  caution: { fill: "#facc15", glow: "rgba(250,204,21,0.8)" },
-  danger: { fill: "#ef4444", glow: "rgba(239,68,68,0.8)" },
+  safe: { fill: "var(--color-accent-green)", glow: "rgba(200,255,0,0.8)" },
+  caution: { fill: "var(--color-accent-amber)", glow: "rgba(245,158,11,0.8)" },
+  danger: { fill: "var(--color-accent-red)", glow: "rgba(239,68,68,0.8)" },
 };
 
 const getRadiationLevel = (percentage: number): RadiationLevel => {

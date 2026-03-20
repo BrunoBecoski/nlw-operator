@@ -3,7 +3,7 @@ import type { BundledLanguage } from "shiki";
 import { Badge } from "@/components/ui/badge";
 import { CodeBlock } from "@/components/ui/code-block";
 import { DiffLine } from "@/components/ui/diff-line";
-import { ScoreRing } from "@/components/ui/score-ring";
+import { RadiationDial } from "@/components/ui/radiation-dial";
 import { caller } from "@/trpc/server";
 
 export async function generateMetadata({
@@ -99,7 +99,7 @@ export default async function RoastResultPage({
       <div className="flex flex-col gap-10 w-full max-w-6xl mx-auto px-10 md:px-20 py-10">
         {/* Score Hero */}
         <section className="flex items-center gap-12">
-          <ScoreRing score={roast.score} />
+          <RadiationDial score={roast.score} maxScore={10} />
 
           <div className="flex flex-col gap-4 flex-1">
             <Badge status={badgeStatus}>verdict: {roast.verdict}</Badge>

@@ -19,8 +19,12 @@ export function Navbar({ className, ...props }: NavbarProps) {
   return (
     <nav className={navbar({ className })} {...props}>
       <Link href="/" className={logo()}>
-        <span className="font-mono text-xl font-bold text-accent-green">
-          &gt;
+        <span
+          className="text-2xl text-accent-green"
+          role="img"
+          aria-label="Radiation symbol"
+        >
+          ☢️
         </span>
         <span className="font-mono text-lg font-medium text-text-primary">
           devroast

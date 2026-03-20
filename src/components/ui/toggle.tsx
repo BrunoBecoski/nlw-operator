@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes } from "react";
 import { tv } from "tailwind-variants";
 
 const toggleRoot = tv({
-  base: "inline-flex items-center gap-3 transition-colors",
+  base: "inline-flex items-center gap-3 transition-colors cursor-pointer",
 });
 
 export interface ToggleRootProps
@@ -32,10 +32,10 @@ export function ToggleRoot({
 }
 
 const toggleTrack = tv({
-  base: "relative flex h-[22px] w-[40px] items-center rounded-full p-[3px] transition-colors bg-border-primary",
+  base: "relative flex h-[22px] w-[40px] rounded-full overflow-hidden transition-all bg-bg-input border border-border-primary",
   variants: {
     checked: {
-      true: "bg-accent-green",
+      true: "bg-accent-green border-accent-green shadow-[0_0_10px_var(--color-accent-green)]",
     },
   },
 });
@@ -55,10 +55,10 @@ export function ToggleTrack({
 }
 
 const toggleKnob = tv({
-  base: "h-4 w-4 rounded-full bg-white shadow-sm transition-transform translate-x-0",
+  base: "absolute top-1/2 -translate-y-1/2 h-4 w-4 rounded-full bg-text-secondary shadow-sm transition-all left-[3px]",
   variants: {
     checked: {
-      true: "translate-x-[18px]",
+      true: "translate-x-[18px] bg-black left-[3px]",
     },
   },
 });
@@ -127,8 +127,9 @@ export function Toggle({
       className={className}
       {...props}
     >
-      <ToggleTrack pressed={pressed} />
-      <ToggleKnob pressed={pressed} />
+      <ToggleTrack pressed={pressed}>
+        <ToggleKnob pressed={pressed} />
+      </ToggleTrack>
       {labelText && <ToggleLabel pressed={pressed}>{labelText}</ToggleLabel>}
     </ToggleRoot>
   );

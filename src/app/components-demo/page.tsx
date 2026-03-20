@@ -3,16 +3,7 @@ import { Button, button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/ui/code-block";
 import { DiffLine } from "@/components/ui/diff-line";
 import { RadiationDial } from "@/components/ui/radiation-dial";
-import { ScoreRing } from "@/components/ui/score-ring";
 import { Toggle } from "@/components/ui/toggle";
-
-const variants = Object.keys(button.variants.variant) as Array<
-  keyof typeof button.variants.variant
->;
-
-const sizes = Object.keys(button.variants.size) as Array<
-  keyof typeof button.variants.size
->;
 
 const statuses = ["critical", "warning", "good", "needs_serious_help"] as const;
 
@@ -30,16 +21,20 @@ export default function ComponentsDemoPage() {
       <h1 className="text-3xl font-bold">UI Components Demo</h1>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Button</h2>
-        <p className="text-gray-600">
-          Componente de botão com múltiplas variantes e tamanhos.
+        <h2 className="text-2xl font-semibold text-accent-green">Button</h2>
+        <p className="text-text-secondary">
+          Componentes de botão com estilo Nuclear/Radiation.
         </p>
 
         <div className="space-y-8">
           <div className="space-y-3">
-            <h3 className="text-lg font-medium">Variants</h3>
+            <h3 className="text-lg font-medium text-hazmat-yellow">Variants</h3>
             <div className="flex flex-wrap gap-4">
-              {variants.map((variant) => (
+              {(
+                Object.keys(button.variants.variant) as Array<
+                  keyof typeof button.variants.variant
+                >
+              ).map((variant) => (
                 <Button key={variant} variant={variant}>
                   {variant}
                 </Button>
@@ -48,22 +43,11 @@ export default function ComponentsDemoPage() {
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-lg font-medium">Sizes</h3>
-            <div className="flex flex-wrap items-center gap-4">
-              {sizes.map((size) => (
-                <Button key={size} size={size}>
-                  {size}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <h3 className="text-lg font-medium">States</h3>
+            <h3 className="text-lg font-medium text-hazmat-yellow">States</h3>
             <div className="flex flex-wrap gap-4">
               <Button>Default</Button>
               <Button disabled>Disabled</Button>
-              <Button className="w-40">Custom Width</Button>
+              <Button className="w-44">Custom Width</Button>
             </div>
           </div>
         </div>
@@ -120,20 +104,6 @@ export default function ComponentsDemoPage() {
           <DiffLine type="context">
             for (let i = 0; i &lt; items.length; i++) {"{"}
           </DiffLine>
-        </div>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">ScoreRing</h2>
-        <p className="text-gray-600">
-          Ring circular que exibe pontuação com cores dinâmicas.
-        </p>
-
-        <div className="flex flex-wrap items-center gap-8">
-          <ScoreRing score={3} />
-          <ScoreRing score={6} />
-          <ScoreRing score={10} maxScore={10} />
-          <ScoreRing score={8} maxScore={100} showDenominator={false} />
         </div>
       </section>
 
