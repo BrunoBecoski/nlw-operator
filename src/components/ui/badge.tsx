@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { tv } from "tailwind-variants";
 
 const badge = tv({
-  base: "inline-flex items-center gap-2 font-mono text-xs",
+  base: "inline-flex items-center gap-2 font-mono text-xs font-bold uppercase px-3 py-1 bg-bg-surface rounded-sm",
   variants: {
     status: {
       critical: "text-accent-red",
@@ -14,7 +14,7 @@ const badge = tv({
 });
 
 const dot = tv({
-  base: "h-2 w-2 rounded-full",
+  base: "h-2 w-2",
   variants: {
     status: {
       critical: "bg-accent-red",

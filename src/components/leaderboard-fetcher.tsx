@@ -1,79 +1,85 @@
 "use client";
 
 import { useQueries } from "@tanstack/react-query";
-import Link from "next/link";
 import { useState } from "react";
-import {
-  CodeBlockContent,
-  CodeBlockDots,
-  CodeBlockFilename,
-  CodeBlockHeader,
-  CodeBlockRoot,
-} from "@/components/ui/code-block";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { CodeShell } from "@/components/ui/code-shell";
 import {
   LeaderboardCodeCell,
   LeaderboardEntryRow,
   LeaderboardFooter,
   type LeaderboardItem,
-  LeaderboardMetaRow,
 } from "@/components/ui/leaderboard-table";
-import { RadiationDial } from "@/components/ui/radiation-dial";
 import { useTRPC } from "@/trpc/client";
 
 const MAX_PREVIEW_LINES = 3;
 
-function CodePreview({ code, lang }: { code: string; lang: string }) {
+function CodePreview({
+  code,
+  lang,
+  position,
+  score,
+}: {
+  code: string;
+  lang: string;
+  position?: number;
+  score?: number;
+}) {
   const lines = code.split("\n");
   const isLongCode = lines.length > MAX_PREVIEW_LINES;
   const [isOpen, setIsOpen] = useState(false);
 
+  const previewCode = lines.slice(0, MAX_PREVIEW_LINES).join("\n");
+
   if (!isLongCode) {
     return (
-      <CodeBlockRoot>
-        <CodeBlockHeader>
-          <CodeBlockDots />
-          <CodeBlockFilename lang={lang} />
-        </CodeBlockHeader>
-        <CodeBlockContent code={code} lang={lang} />
-      </CodeBlockRoot>
+      <CodeShell
+        value={code}
+        language={lang}
+        position={position}
+        score={score}
+        showScore
+      />
     );
   }
 
-  const previewCode = lines.slice(0, MAX_PREVIEW_LINES).join("\n");
+  if (isOpen) {
+    return (
+      <div>
+        <CodeShell
+          value={code}
+          language={lang}
+          position={position}
+          score={score}
+          showScore
+        />
+        <button
+          type="button"
+          onClick={() => setIsOpen(false)}
+          className="w-full h-8 flex items-center justify-center text-xs font-mono text-text-tertiary hover:text-text-secondary hover:cursor-pointer border-t border-border-primary transition-colors"
+        >
+          Mostrar menos
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <CodeBlockRoot>
-        <CodeBlockHeader>
-          <CodeBlockDots />
-          <CodeBlockFilename lang={lang} />
-        </CodeBlockHeader>
-        <div className="relative">
-          <CodeBlockContent code={isOpen ? code : previewCode} lang={lang} />
-          {!isOpen && (
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-bg-input to-transparent pointer-events-none" />
-          )}
-        </div>
-        <CollapsibleTrigger asChild>
-          <button
-            type="button"
-            className="w-full h-8 flex items-center justify-center text-xs font-mono text-text-tertiary hover:text-text-secondary border-t border-border-primary transition-colors"
-          >
-            {isOpen
-              ? "Show less"
-              : `Show ${lines.length - MAX_PREVIEW_LINES} more lines`}
-          </button>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <CodeBlockContent code={code} lang={lang} />
-        </CollapsibleContent>
-      </CodeBlockRoot>
-    </Collapsible>
+    <div>
+      <CodeShell
+        value={previewCode}
+        language={lang}
+        position={position}
+        score={score}
+        showScore
+      />
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="w-full h-8 flex items-center justify-center text-xs font-mono text-text-tertiary hover:text-text-secondary hover:cursor-pointer border-t border-border-primary transition-colors"
+      >
+        Mostrar mais {lines.length - MAX_PREVIEW_LINES} linhas
+      </button>
+    </div>
   );
 }
 
@@ -122,19 +128,13 @@ export function LeaderboardFetcher({
     <div className="flex flex-col gap-5">
       {items.map((item) => (
         <LeaderboardEntryRow key={item.rank}>
-          <LeaderboardMetaRow>
-            <Link
-              href={`/roast/${item.rank}`}
-              className="font-mono text-sm text-text-secondary hover:text-accent-green transition-colors"
-            >
-              #{item.rank}
-            </Link>
-            <RadiationDial score={item.score} maxScore={10} />
-          </LeaderboardMetaRow>
           <LeaderboardCodeCell>
-            <Link href={`/roast/${item.rank}`} className="block">
-              <CodePreview code={item.code} lang={item.lang || "javascript"} />
-            </Link>
+            <CodePreview
+              code={item.code}
+              lang={item.lang || "javascript"}
+              position={item.rank}
+              score={item.score}
+            />
           </LeaderboardCodeCell>
         </LeaderboardEntryRow>
       ))}
@@ -152,15 +152,22 @@ function LeaderboardFetcherSkeleton() {
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="flex flex-col border border-border-primary rounded-md overflow-hidden"
+          className="flex flex-col rounded-sm overflow-hidden"
+          style={{
+            border: "2px solid",
+            borderTopColor: "#555",
+            borderLeftColor: "#555",
+            borderRightColor: "#333",
+            borderBottomColor: "#333",
+          }}
         >
-          <div className="flex items-center justify-between h-12 px-5 border-b border-border-primary bg-bg-surface">
+          <div className="flex items-center justify-between h-10 px-4 bg-bg-surface">
             <div className="h-4 w-8 animate-pulse rounded bg-bg-input" />
-            <div className="h-10 w-10 animate-pulse rounded-full bg-bg-input" />
+            <div className="h-5 w-12 animate-pulse rounded bg-bg-input" />
           </div>
-          <div className="p-4">
-            <div className="h-4 w-3/4 animate-pulse rounded bg-bg-input mb-2" />
-            <div className="h-4 w-1/2 animate-pulse rounded bg-bg-input" />
+          <div className="p-4 bg-bg-input">
+            <div className="h-4 w-3/4 animate-pulse rounded bg-bg-surface mb-2" />
+            <div className="h-4 w-1/2 animate-pulse rounded bg-bg-surface" />
           </div>
         </div>
       ))}

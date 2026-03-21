@@ -1,15 +1,8 @@
 import { tv } from "tailwind-variants";
-import {
-  CodeBlockContent,
-  CodeBlockDots,
-  CodeBlockFilename,
-  CodeBlockHeader,
-  CodeBlockRoot,
-} from "@/components/ui/code-block";
-import { RadiationDial } from "@/components/ui/radiation-dial";
+import { RadiationDialSm } from "@/components/ui/radiation-dial";
 
 const leaderboardRoot = tv({
-  base: "flex flex-col border border-border-primary rounded-md overflow-hidden",
+  base: "flex flex-col rounded-sm overflow-hidden",
 });
 
 export interface LeaderboardRootProps
@@ -111,7 +104,7 @@ export interface LeaderboardItem {
 }
 
 const leaderboardEntryRow = tv({
-  base: "flex flex-col border border-border-primary rounded-md overflow-hidden",
+  base: "flex flex-col rounded-sm overflow-hidden",
 });
 
 export interface LeaderboardEntryRowProps
@@ -133,7 +126,7 @@ export interface LeaderboardMetaRowProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
 const leaderboardMetaRow = tv({
-  base: "flex items-center justify-between h-12 px-5 border-b border-border-primary bg-bg-surface",
+  base: "flex items-center justify-between h-10 px-4 bg-bg-surface",
 });
 
 export function LeaderboardMetaRow({
@@ -171,14 +164,12 @@ export interface LeaderboardTableProps {
   items: LeaderboardItem[];
   maxScore?: number;
   totalCount?: number;
-  showDenominator?: boolean;
 }
 
 export function LeaderboardTable({
   items,
   maxScore = 10,
   totalCount,
-  showDenominator = false,
 }: LeaderboardTableProps) {
   return (
     <div className="flex flex-col gap-5">
@@ -188,19 +179,15 @@ export function LeaderboardTable({
             <span className="font-mono text-sm text-text-secondary">
               #{item.rank}
             </span>
-            <RadiationDial score={item.score} maxScore={maxScore} />
+            <RadiationDialSm score={item.score} maxScore={maxScore} />
           </LeaderboardMetaRow>
           <LeaderboardCodeCell>
-            <CodeBlockRoot>
-              <CodeBlockHeader>
-                <CodeBlockDots />
-                <CodeBlockFilename lang={item.lang || "js"} />
-              </CodeBlockHeader>
-              <CodeBlockContent
-                code={item.code}
-                lang={item.lang || "javascript"}
-              />
-            </CodeBlockRoot>
+            <div
+              className="p-3 bg-bg-input font-mono text-sm text-text-primary overflow-x-auto"
+              style={{ whiteSpace: "pre" }}
+            >
+              <code>{item.code}</code>
+            </div>
           </LeaderboardCodeCell>
         </LeaderboardEntryRow>
       ))}

@@ -38,6 +38,116 @@ export function RadiationDialRoot({
   );
 }
 
+const radiationDialSmRoot = tv({
+  base: "inline-flex",
+});
+
+export interface RadiationDialSmProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  score: number;
+  maxScore?: number;
+}
+
+export function RadiationDialSm({
+  score,
+  maxScore = 10,
+  className,
+  ...props
+}: RadiationDialSmProps) {
+  const percentage = (score / maxScore) * 100;
+  const level = getRadiationLevel(percentage);
+  const levelColor = ZONE_COLORS[level];
+
+  const centerX = 25;
+  const centerY = 25;
+  const radius = 18;
+  const needleLength = radius - 5;
+
+  const calculateAngle = (pct: number): number => {
+    return -180 + pct * 1.8;
+  };
+
+  const currentAngle = calculateAngle(percentage);
+
+  const needleX =
+    centerX + needleLength * Math.cos((currentAngle * Math.PI) / 180);
+  const needleY =
+    centerY + needleLength * Math.sin((currentAngle * Math.PI) / 180);
+
+  const arcPath = (start: number, end: number, r: number) => {
+    const x1 = centerX + r * Math.cos((start * Math.PI) / 180);
+    const y1 = centerY + r * Math.sin((start * Math.PI) / 180);
+    const x2 = centerX + r * Math.cos((end * Math.PI) / 180);
+    const y2 = centerY + r * Math.sin((end * Math.PI) / 180);
+    const largeArc = end - start > 90 ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`;
+  };
+
+  return (
+    <div
+      className={`${radiationDialSmRoot({ className })} flex items-center gap-2 h-[50px]`}
+      {...props}
+    >
+      <span
+        className="font-mono font-bold text-[18px]"
+        style={{ color: levelColor.fill }}
+      >
+        {score}
+      </span>
+      <svg
+        width={50}
+        height={50}
+        viewBox="0 0 50 40"
+        className="overflow-visible shrink-0"
+        role="img"
+        aria-label={`Score ${score} out of ${maxScore}`}
+      >
+        <path
+          d={arcPath(-180, 0, radius)}
+          fill="none"
+          stroke="#1a1a1a"
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+
+        <path
+          d={arcPath(-180, -120, radius)}
+          fill="none"
+          stroke={ZONE_COLORS.danger.fill}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+        <path
+          d={arcPath(-120, -60, radius)}
+          fill="none"
+          stroke={ZONE_COLORS.caution.fill}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+        <path
+          d={arcPath(-60, 0, radius)}
+          fill="none"
+          stroke={ZONE_COLORS.safe.fill}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+
+        <line
+          x1={centerX}
+          y1={centerY}
+          x2={needleX}
+          y2={needleY}
+          stroke={levelColor.fill}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+
+        <circle cx={centerX} cy={centerY} r={3} fill={levelColor.fill} />
+      </svg>
+    </div>
+  );
+}
+
 export function RadiationDial({ score, maxScore = 10 }: RadiationDialProps) {
   const percentage = (score / maxScore) * 100;
   const level = getRadiationLevel(percentage);

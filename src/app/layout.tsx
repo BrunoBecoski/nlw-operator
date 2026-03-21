@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, JetBrains_Mono } from "next/font/google";
+import { Space_Mono } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { TRPCReactProvider } from "@/trpc/client";
 import "./globals.css";
 
-const jetbrainsMono = JetBrains_Mono({
+const spaceMono = Space_Mono({
   variable: "--font-mono",
-  subsets: ["latin"],
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-mono-secondary",
-  weight: ["400", "500", "600"],
+  weight: ["400", "700"],
   subsets: ["latin"],
 });
 
@@ -29,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${jetbrainsMono.variable} ${ibmPlexMono.variable} antialiased font-sans bg-bg-page text-text-primary min-h-screen`}
+        className={`${spaceMono.variable} antialiased bg-radiation-pattern text-text-primary min-h-screen`}
       >
         <TRPCReactProvider>
           <Navbar />

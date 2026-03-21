@@ -6,7 +6,7 @@ import { useState } from "react";
 import ShameLeaderboard from "@/components/shame-leaderboard";
 import StatsBar from "@/components/stats-bar";
 import { Button } from "@/components/ui/button";
-import { CodeEditor } from "@/components/ui/code-editor";
+import { CodeShell } from "@/components/ui/code-shell";
 import { Toggle } from "@/components/ui/toggle";
 import { useLanguageDetection } from "@/hooks/use-language-detection";
 import { useTRPC } from "@/trpc/client";
@@ -51,11 +51,13 @@ export default function Home() {
       </section>
 
       {/* Code Editor */}
-      <CodeEditor
+      <CodeShell
         value={code}
         onChange={setCode}
-        language={resolvedLanguage as any}
+        language={resolvedLanguage}
         onLanguageChange={setManualLanguage}
+        detectedLanguage={detectedLanguage}
+        editable
       />
 
       {/* Actions Bar */}
@@ -95,7 +97,7 @@ export default function Home() {
           </h2>
           <a
             href="/leaderboard"
-            className="font-mono text-sm text-text-secondary hover:text-text-primary px-3 py-1.5 border border-border-primary rounded-md transition-colors"
+            className="font-mono text-sm text-text-secondary hover:text-text-primary px-3 py-1 hover:bg-bg-input rounded transition-colors"
           >
             view all &gt;&gt;
           </a>

@@ -32,12 +32,7 @@ export function ToggleRoot({
 }
 
 const toggleTrack = tv({
-  base: "relative flex h-[22px] w-[40px] rounded-full overflow-hidden transition-all bg-bg-input border border-border-primary",
-  variants: {
-    checked: {
-      true: "bg-accent-green border-accent-green shadow-[0_0_10px_var(--color-accent-green)]",
-    },
-  },
+  base: "relative flex h-[24px] w-[48px] bg-bg-input",
 });
 
 export interface ToggleTrackProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -50,15 +45,18 @@ export function ToggleTrack({
   ...props
 }: ToggleTrackProps) {
   return (
-    <div className={toggleTrack({ className, checked: pressed })} {...props} />
+    <div
+      className={`${toggleTrack({ className })} toggle-track ${pressed ? "checked" : ""}`}
+      {...props}
+    />
   );
 }
 
 const toggleKnob = tv({
-  base: "absolute top-1/2 -translate-y-1/2 h-4 w-4 rounded-full bg-text-secondary shadow-sm transition-all left-[3px]",
+  base: "absolute top-[3px] left-[3px] h-[14px] w-[14px] bg-bg-surface transition-all duration-100",
   variants: {
     checked: {
-      true: "translate-x-[18px] bg-black left-[3px]",
+      true: "translate-x-[24px]",
     },
   },
 });
@@ -73,12 +71,15 @@ export function ToggleKnob({
   ...props
 }: ToggleKnobProps) {
   return (
-    <div className={toggleKnob({ className, checked: pressed })} {...props} />
+    <div
+      className={`${toggleKnob({ className, checked: pressed })} toggle-knob ${pressed ? "checked" : ""}`}
+      {...props}
+    />
   );
 }
 
 const toggleLabel = tv({
-  base: "text-xs font-mono transition-colors text-text-secondary",
+  base: "text-xs font-mono font-bold uppercase transition-colors text-text-secondary",
   variants: {
     checked: {
       true: "text-accent-green",

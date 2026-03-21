@@ -83,7 +83,11 @@ export interface DiffLineRootProps
 export const DiffLineRoot = forwardRef<HTMLDivElement, DiffLineRootProps>(
   ({ className, type = "context", children, ...props }, ref) => {
     return (
-      <div ref={ref} className={diffLineRoot({ type, className })} {...props}>
+      <div
+        ref={ref}
+        className={`${diffLineRoot({ type, className })} diffline-root`}
+        {...props}
+      >
         {children}
       </div>
     );

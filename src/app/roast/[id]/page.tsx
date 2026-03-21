@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import type { BundledLanguage } from "shiki";
 import { Badge } from "@/components/ui/badge";
-import { CodeBlock } from "@/components/ui/code-block";
+import { CodeShell } from "@/components/ui/code-shell";
 import { DiffLine } from "@/components/ui/diff-line";
 import { RadiationDial } from "@/components/ui/radiation-dial";
 import { caller } from "@/trpc/server";
@@ -138,9 +137,11 @@ export default async function RoastResultPage({
             </h2>
           </div>
 
-          <CodeBlock
-            code={roast.code}
-            lang={roast.language as BundledLanguage}
+          <CodeShell
+            value={roast.code}
+            language={roast.language}
+            score={roast.score}
+            showScore
           />
         </section>
 
