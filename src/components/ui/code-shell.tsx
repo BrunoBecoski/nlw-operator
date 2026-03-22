@@ -6,7 +6,15 @@ import { useShikiHighlighter } from "@/hooks/use-shiki-highlighter";
 import { RadiationDialSm } from "./radiation-dial";
 
 const codeShellRoot = tv({
-  base: "rounded-sm overflow-hidden border-2 border-border-primary",
+  base: "rounded-sm overflow-hidden",
+  variants: {
+    bordered: {
+      true: "border-2 border-border-primary",
+    },
+  },
+  defaultVariants: {
+    bordered: true,
+  },
 });
 
 export interface CodeShellRootProps
@@ -15,18 +23,23 @@ export interface CodeShellRootProps
 
 export function CodeShellRoot({
   className,
+  bordered,
   children,
   ...props
 }: CodeShellRootProps) {
   return (
-    <div className={codeShellRoot({ className })} {...props}>
+    <div
+      className={codeShellRoot({ bordered, className })}
+      style={{ backgroundColor: "var(--color-bg-surface)" }}
+      {...props}
+    >
       {children}
     </div>
   );
 }
 
 const codeShellHeader = tv({
-  base: "flex items-center justify-between h-10 px-4 bg-bg-surface",
+  base: "flex items-center justify-between h-10 px-4",
 });
 
 export interface CodeShellHeaderProps
@@ -38,7 +51,11 @@ export function CodeShellHeader({
   ...props
 }: CodeShellHeaderProps) {
   return (
-    <div className={codeShellHeader({ className })} {...props}>
+    <div
+      className={codeShellHeader({ className })}
+      style={{ backgroundColor: "var(--color-bg-surface)" }}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -104,12 +121,17 @@ export const CodeShellCopyButton = forwardRef<
   HTMLButtonElement,
   CodeShellCopyButtonProps
 >(({ className, onCopy, ...props }, ref) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onCopy?.();
+  };
+
   return (
     <button
       ref={ref}
       type="button"
       className={codeShellCopyButton({ className })}
-      onClick={onCopy}
+      onClick={handleClick}
       {...props}
     >
       <svg
@@ -133,7 +155,7 @@ export const CodeShellCopyButton = forwardRef<
 CodeShellCopyButton.displayName = "CodeShellCopyButton";
 
 const codeShellContent = tv({
-  base: "bg-bg-input p-3 overflow-x-auto",
+  base: "p-3 overflow-x-auto",
 });
 
 export interface CodeShellContentProps
@@ -145,7 +167,11 @@ export function CodeShellContent({
   ...props
 }: CodeShellContentProps) {
   return (
-    <div className={codeShellContent({ className })} {...props}>
+    <div
+      className={codeShellContent({ className })}
+      style={{ backgroundColor: "var(--color-bg-input)" }}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -222,6 +248,8 @@ export interface CodeShellProps {
   showHeader?: boolean;
   position?: number;
   editable?: boolean;
+  bordered?: boolean;
+  onClick?: () => void;
   className?: string;
 }
 
@@ -237,6 +265,8 @@ export function CodeShell({
   showHeader = true,
   position,
   editable = false,
+  bordered = true,
+  onClick,
   className,
 }: CodeShellProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -278,7 +308,15 @@ export function CodeShell({
   }, [value]);
 
   return (
-    <CodeShellRoot className={className}>
+    <CodeShellRoot
+      className={`${onClick ? "hover:cursor-pointer hover:opacity-90" : ""} ${className ?? ""}`}
+      bordered={bordered}
+      onClick={(e) => {
+        if (e.target instanceof HTMLElement && !e.target.closest("button")) {
+          onClick?.();
+        }
+      }}
+    >
       {showHeader && (
         <CodeShellHeader>
           <div className="flex items-center gap-2">
@@ -319,10 +357,35 @@ export function CodeShell({
             />
           </div>
         )}
-        {!editable && (
+        {!editable && displayHtml ? (
           <CodeShellHighlight
             dangerouslySetInnerHTML={{ __html: displayHtml }}
           />
+        ) : (
+          <CodeShellHighlight>
+            <pre
+              style={{
+                backgroundColor: "var(--color-bg-input)",
+                padding: "12px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "14px",
+              }}
+            >
+              <code>
+                {value.split("\n").map((line, i) => (
+                  <span
+                    key={`${line}-${i}`}
+                    style={{
+                      display: "block",
+                      color: "var(--color-text-primary)",
+                    }}
+                  >
+                    {line || " "}
+                  </span>
+                ))}
+              </code>
+            </pre>
+          </CodeShellHighlight>
         )}
       </CodeShellContent>
     </CodeShellRoot>

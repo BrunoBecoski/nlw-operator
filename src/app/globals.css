@@ -1,15 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #3a3a3a;
-    --foreground: #ededed;
-  }
+  --background: #3a3a3a;
+  --foreground: #e5e5e5;
 }
 
 @theme inline {
@@ -23,18 +16,20 @@
   --color-accent-red: #ef4444;
   --color-accent-amber: #f59e0b;
 
-  /* Text Colors - Light */
-  --color-text-primary: #171717;
-  --color-text-secondary: #6b7280;
-  --color-text-tertiary: #9ca3af;
+  /* Text Colors - Dark */
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #a3a3a3;
+  --color-text-tertiary: #737373;
 
-  /* Border - Light */
-  --color-border-primary: #e5e7eb;
+  /* Border - Dark */
+  --color-border-primary: #555555;
+  --color-border-primary-light: #777777;
+  --color-border-primary-dark: #333333;
 
-  /* Background - Light */
-  --color-bg-page: #ffffff;
-  --color-bg-surface: #f9fafb;
-  --color-bg-input: #f9fafb;
+  /* Background - Dark */
+  --color-bg-page: #3a3a3a;
+  --color-bg-surface: #3a3a3a;
+  --color-bg-input: #2a2a2a;
 
   /* Nuclear/Radiation Colors */
   --color-neon-green: #39ff14;
@@ -51,23 +46,9 @@
   --color-syn-operator: #fcd34d;
   --color-syn-number: #f472b6;
 
-  /* Dark mode overrides */
+  /* Color aliases */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-}
-
-@media (prefers-color-scheme: dark) {
-  @theme inline {
-    --color-text-primary: #e5e5e5;
-    --color-text-secondary: #a3a3a3;
-    --color-text-tertiary: #737373;
-    --color-border-primary: #555555;
-    --color-border-primary-light: #777777;
-    --color-border-primary-dark: #333333;
-    --color-bg-page: #3a3a3a;
-    --color-bg-surface: #3a3a3a;
-    --color-bg-input: #2a2a2a;
-  }
 }
 
 body {

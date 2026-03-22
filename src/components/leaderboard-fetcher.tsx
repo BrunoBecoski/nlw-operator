@@ -1,14 +1,23 @@
 "use client";
 
 import { useQueries } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CodeShell } from "@/components/ui/code-shell";
 import {
   LeaderboardCodeCell,
   LeaderboardEntryRow,
   LeaderboardFooter,
-  type LeaderboardItem,
 } from "@/components/ui/leaderboard-table";
+
+interface LeaderboardItem {
+  id: string;
+  rank: number;
+  code: string;
+  score: number;
+  lang: string;
+}
+
 import { useTRPC } from "@/trpc/client";
 
 const MAX_PREVIEW_LINES = 3;
@@ -18,12 +27,15 @@ function CodePreview({
   lang,
   position,
   score,
+  id,
 }: {
   code: string;
   lang: string;
   position?: number;
   score?: number;
+  id: string;
 }) {
+  const router = useRouter();
   const lines = code.split("\n");
   const isLongCode = lines.length > MAX_PREVIEW_LINES;
   const [isOpen, setIsOpen] = useState(false);
@@ -38,6 +50,8 @@ function CodePreview({
         position={position}
         score={score}
         showScore
+        bordered={false}
+        onClick={() => router.push(`/roast/${id}`)}
       />
     );
   }
@@ -51,13 +65,18 @@ function CodePreview({
           position={position}
           score={score}
           showScore
+          bordered={false}
+          onClick={() => router.push(`/roast/${id}`)}
         />
         <button
           type="button"
-          onClick={() => setIsOpen(false)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(false);
+          }}
           className="w-full h-8 flex items-center justify-center text-xs font-mono text-text-tertiary hover:text-text-secondary hover:cursor-pointer border-t border-border-primary transition-colors"
         >
-          Mostrar menos
+          Show less
         </button>
       </div>
     );
@@ -71,13 +90,18 @@ function CodePreview({
         position={position}
         score={score}
         showScore
+        bordered={false}
+        onClick={() => router.push(`/roast/${id}`)}
       />
       <button
         type="button"
-        onClick={() => setIsOpen(true)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(true);
+        }}
         className="w-full h-8 flex items-center justify-center text-xs font-mono text-text-tertiary hover:text-text-secondary hover:cursor-pointer border-t border-border-primary transition-colors"
       >
-        Mostrar mais {lines.length - MAX_PREVIEW_LINES} linhas
+        Show {lines.length - MAX_PREVIEW_LINES} more lines
       </button>
     </div>
   );
@@ -118,6 +142,7 @@ export function LeaderboardFetcher({
   const totalCount = totalCountResult.data ?? initialTotalCount ?? 0;
 
   const items: LeaderboardItem[] = leaderboardData.map((entry, index) => ({
+    id: entry.id,
     rank: index + 1,
     code: entry.code,
     score: Number(entry.score),
@@ -130,6 +155,7 @@ export function LeaderboardFetcher({
         <LeaderboardEntryRow key={item.rank}>
           <LeaderboardCodeCell>
             <CodePreview
+              id={item.id}
               code={item.code}
               lang={item.lang || "javascript"}
               position={item.rank}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ShameLeaderboard from "@/components/shame-leaderboard";
@@ -95,12 +96,12 @@ export default function Home() {
           <h2 className="font-mono text-lg font-medium text-text-primary">
             Top 3
           </h2>
-          <a
+          <Link
             href="/leaderboard"
-            className="font-mono text-sm text-text-secondary hover:text-text-primary px-3 py-1 hover:bg-bg-input rounded transition-colors"
+            className="inline-flex items-center justify-center whitespace-nowrap font-mono font-bold uppercase px-6 py-2 cursor-pointer transition-all duration-100 bg-transparent text-accent-green border-2 border-t-accent-green-light border-l-accent-green-light border-r-accent-green-dark border-b-accent-green-dark hover:bg-accent-green/10 rounded-sm"
           >
             view all &gt;&gt;
-          </a>
+          </Link>
         </div>
         <p className="font-mono text-xs text-text-tertiary">
           {"// the worst code on the internet, ranked by shame"}

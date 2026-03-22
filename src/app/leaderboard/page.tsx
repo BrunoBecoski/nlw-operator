@@ -1,9 +1,5 @@
-import { StatsBarClient } from "@/components/stats-bar-client";
-import {
-  type LeaderboardItem,
-  LeaderboardTable,
-} from "@/components/ui/leaderboard-table";
-import { caller } from "@/trpc/server";
+import { LeaderboardTableWithData } from "@/components/leaderboard-table-with-data";
+import { StatsBarWithData } from "@/components/stats-bar-with-data";
 
 export const revalidate = 3600;
 
@@ -12,24 +8,7 @@ export const metadata = {
   description: "The most roasted code on the internet",
 };
 
-export default async function LeaderboardPage() {
-  const trpc = await caller();
-  const [leaderboardData, stats] = await Promise.all([
-    trpc.leaderboard.getLeaderboard({ limit: 20 }),
-    trpc.roast.getStats(),
-  ]);
-
-  const items: LeaderboardItem[] = leaderboardData.map((entry, index) => ({
-    rank: index + 1,
-    code: entry.code,
-    score: Number(entry.score),
-    lang: entry.language,
-  }));
-
-  const totalCount =
-    typeof stats.totalRoasts === "number" ? stats.totalRoasts : 0;
-  const avgScore = typeof stats.avgScore === "number" ? stats.avgScore : 0;
-
+export default function LeaderboardPage() {
   return (
     <div className="max-w-5xl mx-auto px-20 py-10 flex flex-col gap-10">
       {/* Hero Section */}
@@ -45,22 +24,12 @@ export default async function LeaderboardPage() {
         <p className="font-mono text-sm text-text-secondary">
           {"// the most roasted code on the internet"}
         </p>
-        <StatsBarClient
-          codesRoasted={totalCount}
-          avgScore={avgScore}
-          loadedCodesRoasted={totalCount}
-          loadedAvgScore={avgScore}
-        />
+        <StatsBarWithData />
       </section>
 
       {/* Leaderboard Table */}
       <section className="flex flex-col gap-5">
-        <LeaderboardTable
-          items={items}
-          maxScore={10}
-          totalCount={totalCount}
-          showDenominator={false}
-        />
+        <LeaderboardTableWithData />
       </section>
     </div>
   );

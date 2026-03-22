@@ -1,5 +1,8 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { tv } from "tailwind-variants";
-import { RadiationDialSm } from "@/components/ui/radiation-dial";
+import { CodeShell } from "@/components/ui/code-shell";
 
 const leaderboardRoot = tv({
   base: "flex flex-col rounded-sm overflow-hidden",
@@ -97,6 +100,7 @@ export function LeaderboardFooter({
 }
 
 export interface LeaderboardItem {
+  id: string;
   rank: number;
   code: string;
   score: number;
@@ -104,7 +108,7 @@ export interface LeaderboardItem {
 }
 
 const leaderboardEntryRow = tv({
-  base: "flex flex-col rounded-sm overflow-hidden",
+  base: "flex flex-col rounded-sm overflow-hidden border-2",
 });
 
 export interface LeaderboardEntryRowProps
@@ -116,7 +120,13 @@ export function LeaderboardEntryRow({
   ...props
 }: LeaderboardEntryRowProps) {
   return (
-    <div className={leaderboardEntryRow({ className })} {...props}>
+    <div
+      className={leaderboardEntryRow({ className })}
+      style={{
+        borderColor: "var(--color-border-primary)",
+      }}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -126,7 +136,7 @@ export interface LeaderboardMetaRowProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
 const leaderboardMetaRow = tv({
-  base: "flex items-center justify-between h-10 px-4 bg-bg-surface",
+  base: "flex items-center justify-between h-10 px-4",
 });
 
 export function LeaderboardMetaRow({
@@ -135,7 +145,11 @@ export function LeaderboardMetaRow({
   ...props
 }: LeaderboardMetaRowProps) {
   return (
-    <div className={leaderboardMetaRow({ className })} {...props}>
+    <div
+      className={leaderboardMetaRow({ className })}
+      style={{ backgroundColor: "var(--color-bg-surface)" }}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -171,24 +185,22 @@ export function LeaderboardTable({
   maxScore = 10,
   totalCount,
 }: LeaderboardTableProps) {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col gap-5">
       {items.map((item) => (
         <LeaderboardEntryRow key={item.rank}>
-          <LeaderboardMetaRow>
-            <span className="font-mono text-sm text-text-secondary">
-              #{item.rank}
-            </span>
-            <RadiationDialSm score={item.score} maxScore={maxScore} />
-          </LeaderboardMetaRow>
-          <LeaderboardCodeCell>
-            <div
-              className="p-3 bg-bg-input font-mono text-sm text-text-primary overflow-x-auto"
-              style={{ whiteSpace: "pre" }}
-            >
-              <code>{item.code}</code>
-            </div>
-          </LeaderboardCodeCell>
+          <CodeShell
+            value={item.code}
+            language={item.lang || "javascript"}
+            position={item.rank}
+            score={item.score}
+            maxScore={maxScore}
+            showScore
+            bordered={false}
+            onClick={() => router.push(`/roast/${item.id}`)}
+          />
         </LeaderboardEntryRow>
       ))}
       {totalCount && (

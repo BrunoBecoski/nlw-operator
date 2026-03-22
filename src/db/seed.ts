@@ -115,12 +115,9 @@ async function seed() {
 
   const roastData: (typeof roasts.$inferInsert)[] = [];
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 10; i++) {
     const language = faker.helpers.arrayElement(languages);
-    const score =
-      Math.round(
-        faker.number.float({ min: 0, max: 10, fractionDigits: 1 }) * 10,
-      ) / 10;
+    const score = faker.number.float({ min: 1, max: 10, fractionDigits: 1 });
     const verdict = getVerdictFromScore(score);
 
     roastData.push({
