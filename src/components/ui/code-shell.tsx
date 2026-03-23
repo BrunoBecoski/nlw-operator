@@ -109,7 +109,7 @@ export function CodeShellScore({
 }
 
 const codeShellCopyButton = tv({
-  base: "p-1.5 cursor-pointer hover:bg-bg-input rounded transition-colors text-text-secondary hover:text-text-primary",
+  base: "p-1.5 cursor-pointer hover:bg-bg-input rounded transition-colors text-accent-green hover:text-accent-green-light",
 });
 
 export interface CodeShellCopyButtonProps
@@ -321,15 +321,21 @@ export function CodeShell({
         <CodeShellHeader>
           <div className="flex items-center gap-2">
             {position !== undefined && (
-              <span className="font-mono text-sm text-text-secondary">
+              <span
+                className={`font-mono text-sm ${position === 1 ? "text-accent-green font-bold" : "text-text-secondary"}`}
+              >
                 #{position}
               </span>
             )}
             <CodeShellLanguageBadge language={language} />
           </div>
           <div className="flex items-center gap-2">
-            {showScore && score !== undefined && (
-              <CodeShellScore score={score} maxScore={maxScore} />
+            {position !== undefined && (
+              <span
+                className={`font-mono text-sm ${position === 1 ? "text-[#1a1a1a] font-bold" : "text-text-secondary"}`}
+              >
+                #{position}
+              </span>
             )}
             <CodeShellCopyButton onClick={handleCopy} />
           </div>

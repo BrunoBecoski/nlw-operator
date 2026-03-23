@@ -7,7 +7,7 @@ const badge = tv({
     status: {
       critical: "text-accent-red",
       warning: "text-accent-amber",
-      good: "text-accent-green",
+      good: "text-[var(--color-badge-good)]",
       needs_serious_help: "text-accent-red",
     },
   },
@@ -19,7 +19,7 @@ const dot = tv({
     status: {
       critical: "bg-accent-red",
       warning: "bg-accent-amber",
-      good: "bg-accent-green",
+      good: "bg-[var(--color-badge-good)]",
       needs_serious_help: "bg-accent-red",
     },
   },
