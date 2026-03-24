@@ -1,24 +1,14 @@
 import Link from "next/link";
-import { tv } from "tailwind-variants";
-
-const navbar = tv({
-  base: "flex items-center justify-between h-10 px-4 bg-bg-surface border-b-2 border-border-primary",
-});
-
-const logo = tv({
-  base: "flex items-center gap-2 cursor-pointer",
-});
-
-const navLink = tv({
-  base: "font-mono text-xs font-bold uppercase text-text-secondary hover:text-text-primary transition-colors px-3 py-1 hover:bg-bg-input rounded",
-});
 
 export interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Navbar({ className, ...props }: NavbarProps) {
   return (
-    <nav className={`${navbar({ className })} navbar-xp-bar`} {...props}>
-      <Link href="/" className={logo()}>
+    <nav
+      className={`flex items-center justify-between h-12 px-4 bg-accent-green ${className ?? ""} xp-border-bottom`}
+      {...props}
+    >
+      <Link href="/" className="flex items-center gap-2 cursor-pointer">
         <span
           className="text-xl text-accent-green"
           role="img"
@@ -26,11 +16,14 @@ export function Navbar({ className, ...props }: NavbarProps) {
         >
           ☢️
         </span>
-        <span className="font-mono text-sm font-medium text-text-primary">
+        <span className="font-mono text-sm font-black text-black bg-[#f0c000]">
           devroast
         </span>
       </Link>
-      <Link href="/leaderboard" className={navLink()}>
+      <Link
+        href="/leaderboard"
+        className="font-mono text-xs font-bold uppercase text-black hover:text-text-primary transition-colors px-3 py-1 hover:bg-[#3a3a3a]"
+      >
         leaderboard
       </Link>
     </nav>

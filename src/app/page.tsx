@@ -93,7 +93,7 @@ export default function Home() {
       {/* Leaderboard Preview */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
-          <h2 className="font-mono text-lg font-medium text-text-primary">
+          <h2 className="font-mono text-lg font-bold text-accent-green">
             Top 3
           </h2>
           <Link

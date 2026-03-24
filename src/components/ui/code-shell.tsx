@@ -9,7 +9,7 @@ const codeShellRoot = tv({
   base: "rounded-sm overflow-hidden",
   variants: {
     bordered: {
-      true: "border-2 border-border-primary",
+      true: "xp-border-gold",
     },
   },
   defaultVariants: {
@@ -38,10 +38,6 @@ export function CodeShellRoot({
   );
 }
 
-const codeShellHeader = tv({
-  base: "flex items-center justify-between h-10 px-4",
-});
-
 export interface CodeShellHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -52,18 +48,13 @@ export function CodeShellHeader({
 }: CodeShellHeaderProps) {
   return (
     <div
-      className={codeShellHeader({ className })}
-      style={{ backgroundColor: "var(--color-bg-surface)" }}
+      className={`flex items-center justify-between h-10 px-2 bg-accent-green xp-border-top ${className ?? ""}`}
       {...props}
     >
       {children}
     </div>
   );
 }
-
-const codeShellLanguageBadge = tv({
-  base: "px-2 py-0.5 rounded text-xs font-mono bg-bg-input border border-border-primary text-text-secondary",
-});
 
 export interface CodeShellLanguageBadgeProps
   extends React.HTMLAttributes<HTMLSpanElement> {
@@ -77,7 +68,10 @@ export function CodeShellLanguageBadge({
   ...props
 }: CodeShellLanguageBadgeProps) {
   return (
-    <span className={codeShellLanguageBadge({ className })} {...props}>
+    <span
+      className={`language-badge font-mono text-xs ${className ?? ""}`}
+      {...props}
+    >
       {children || language}
     </span>
   );
@@ -109,7 +103,7 @@ export function CodeShellScore({
 }
 
 const codeShellCopyButton = tv({
-  base: "p-1.5 cursor-pointer hover:bg-bg-input rounded transition-colors text-accent-green hover:text-accent-green-light",
+  base: "xp-copy-button",
 });
 
 export interface CodeShellCopyButtonProps
@@ -321,21 +315,15 @@ export function CodeShell({
         <CodeShellHeader>
           <div className="flex items-center gap-2">
             {position !== undefined && (
-              <span
-                className={`font-mono text-sm ${position === 1 ? "text-accent-green font-bold" : "text-text-secondary"}`}
-              >
+              <span className="font-mono text-sm text-black font-bold">
                 #{position}
               </span>
             )}
             <CodeShellLanguageBadge language={language} />
           </div>
           <div className="flex items-center gap-2">
-            {position !== undefined && (
-              <span
-                className={`font-mono text-sm ${position === 1 ? "text-[#1a1a1a] font-bold" : "text-text-secondary"}`}
-              >
-                #{position}
-              </span>
+            {score !== undefined && (
+              <CodeShellScore score={score} maxScore={maxScore} />
             )}
             <CodeShellCopyButton onClick={handleCopy} />
           </div>

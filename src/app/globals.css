@@ -264,7 +264,7 @@ body {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(180deg, #b8860b 0%, #f0c000 100%);
+  background: linear-gradient(00deg, #b8860b 0%, #f0c000 100%);
 }
 
 .toolbar-xp-navbar::after {
@@ -277,39 +277,118 @@ body {
   background: linear-gradient(180deg, #f0c000 0%, #ffd700 100%);
 }
 
-/* CodeShellHeader variant - only left and right borders using pseudo-elements */
-.toolbar-xp-sides {
-  border: none;
+/* XP Borda 3D estilo Windows - luz em cima (clara), sombra embaixo (escura) */
+.xp-border-top {
   position: relative;
-  background: var(--color-bg-surface);
+  border-left: 1px solid #b8860b;
+  border-right: 1px solid #ffd700;
+  border-top: 3px solid #ffd700;
+  border-bottom: 3px solid #b8860b;
 }
 
-.toolbar-xp-sides::before {
+.xp-border-top::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(0deg, #b8860b 0%, #f0c000 100%);
-
+  right: 0;
+  height: 3px;
+  background: linear-gradient(180deg, #ffd700 0%, #f0c000 100%);
 }
 
-.toolbar-xp-sides::after {
+.xp-border-top::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(180deg, #f0c000 0%, #b8860b 100%);
+}
+
+/* XP Borda 3D estilo Windows - sombra em cima (escura), luz embaixo (clara) */
+.xp-border-bottom {
+  position: relative;
+  border-left: 1px solid #b8860b;
+  border-right: 1px solid #ffd700;
+  border-top: 3px solid #b8860b;
+  border-bottom: 3px solid #ffd700;
+}
+
+.xp-border-bottom::before {
   content: "";
   position: absolute;
   top: 0;
+  left: 0;
   right: 0;
+  height: 3px;
+  background: linear-gradient(180deg, #b8860b 0%, #f0c000 100%);
+}
+
+.xp-border-bottom::after {
+  content: "";
+  position: absolute;
   bottom: 0;
-  width: 3px;
+  left: 0;
+  right: 0;
+  height: 3px;
   background: linear-gradient(180deg, #f0c000 0%, #ffd700 100%);
 }
 
-.navbar-border {
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
+.language-badge {
+  padding: 2px 6px;
+  border: 2px solid;
+  border-top-color: #555;
+  border-left-color: #555;
+  border-right-color: #333;
   border-bottom-color: #333;
-  box-shadow: 0 2px 0 #555;
+  border-radius: 3px;
+  background-color: var(--color-bg-input);
+  color: #ffffff;
+}
+
+.xp-inset {
+  padding: 4px;
+  border: 2px solid;
+  border-top-color: #555;
+  border-left-color: #555;
+  border-right-color: #333;
+  border-bottom-color: #333;
+  border-radius: 3px;
+  background-color: var(--color-bg-input);
+}
+
+.xp-copy-button {
+  padding: 4px;
+  border: 2px solid;
+  border-top-color: var(--color-accent-green-light);
+  border-left-color: var(--color-accent-green-light);
+  border-right-color: var(--color-accent-green-dark);
+  border-bottom-color: var(--color-accent-green-dark);
+  border-radius: 2px;
+  background-color: var(--color-accent-green);
+  cursor: pointer;
+  color: #000000;
+  transition: filter 0.1s;
+}
+
+.xp-copy-button:hover {
+  filter: brightness(1.1);
+}
+
+.xp-copy-button:active {
+  border-top-color: var(--color-accent-green-dark);
+  border-left-color: var(--color-accent-green-dark);
+  border-right-color: var(--color-accent-green-light);
+  border-bottom-color: var(--color-accent-green-light);
+}
+
+.xp-border-gold {
+  border: 2px solid;
+  border-top-color: var(--color-accent-green-dark);
+  border-left-color: var(--color-accent-green-dark);
+  border-right-color: var(--color-accent-green-light);
+  border-bottom-color: var(--color-accent-green-light);
 }
 
 /* CodeBlock Border */

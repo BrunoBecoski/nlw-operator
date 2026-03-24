@@ -85,18 +85,18 @@ export function RadiationDialSm({
 
   return (
     <div
-      className={`${radiationDialSmRoot({ className })} flex items-center gap-2 h-[50px]`}
+      className={`${radiationDialSmRoot({ className })} flex items-center gap-2 h-[28px] xp-inset`}
       {...props}
     >
       <span
-        className="font-mono font-bold text-[18px]"
+        className="font-mono font-bold text-[11px]"
         style={{ color: levelColor.fill }}
       >
         {score}
       </span>
       <svg
-        width={50}
-        height={50}
+        width={28}
+        height={28}
         viewBox="0 0 50 40"
         className="overflow-visible shrink-0"
         role="img"

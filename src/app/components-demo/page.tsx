@@ -54,7 +54,7 @@ function CodePreview({
           onClick={() => setIsOpen(false)}
           className="w-full h-8 flex items-center justify-center text-xs font-mono text-text-tertiary hover:text-text-secondary hover:cursor-pointer border-t border-border-primary transition-colors"
         >
-          Mostrar menos
+          Show less
         </button>
       </div>
     );
@@ -74,7 +74,7 @@ function CodePreview({
         onClick={() => setIsOpen(true)}
         className="w-full h-8 flex items-center justify-center text-xs font-mono text-text-tertiary hover:text-text-secondary hover:cursor-pointer border-t border-border-primary transition-colors"
       >
-        Mostrar mais {lines.length - MAX_PREVIEW_LINES} linhas
+        Show {lines.length - MAX_PREVIEW_LINES} more lines
       </button>
     </div>
   );
