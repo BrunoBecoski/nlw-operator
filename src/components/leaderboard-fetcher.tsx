@@ -50,7 +50,7 @@ function CodePreview({
         position={position}
         score={score}
         showScore
-        bordered={false}
+        bordered={true}
         onClick={() => router.push(`/roast/${id}`)}
       />
     );
@@ -65,7 +65,7 @@ function CodePreview({
           position={position}
           score={score}
           showScore
-          bordered={false}
+          bordered={true}
           onClick={() => router.push(`/roast/${id}`)}
         />
         <button
@@ -90,7 +90,7 @@ function CodePreview({
         position={position}
         score={score}
         showScore
-        bordered={false}
+        bordered={true}
         onClick={() => router.push(`/roast/${id}`)}
       />
       <button

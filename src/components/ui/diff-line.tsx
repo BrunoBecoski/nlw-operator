@@ -1,5 +1,14 @@
 import { forwardRef } from "react";
 import { tv } from "tailwind-variants";
+import {
+  TitleBarClose,
+  TitleBarHeader,
+  TitleBarMaximize,
+  TitleBarMinimize,
+  TitleBarRoot,
+  TitleBarTitle,
+  TitleBarWindowControls,
+} from "./title-bar";
 
 export type DiffType = "removed" | "added" | "context";
 
@@ -8,7 +17,7 @@ const diffLinePrefix = tv({
   variants: {
     type: {
       removed: "text-accent-red",
-      added: "text-accent-green",
+      added: "text-radiation-green",
       context: "text-text-tertiary",
     },
   },
@@ -69,7 +78,7 @@ const diffLineRoot = tv({
   variants: {
     type: {
       removed: "bg-accent-red/10",
-      added: "bg-accent-green/10",
+      added: "bg-radiation-green/10",
       context: "",
     },
   },
@@ -95,6 +104,44 @@ export const DiffLineRoot = forwardRef<HTMLDivElement, DiffLineRootProps>(
 );
 
 DiffLineRoot.displayName = "DiffLineRoot";
+
+export interface DiffLineContainerProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  language?: string;
+}
+
+export const DiffLineContainer = forwardRef<
+  HTMLDivElement,
+  DiffLineContainerProps
+>(({ className, language = "ts", children, ...props }, ref) => {
+  const extension = language
+    .toLowerCase()
+    .replace(/^.*\./, "")
+    .replace("typescript", "ts")
+    .replace("javascript", "js");
+  const title = `your_code.${extension} → improved_code.${extension}`;
+
+  return (
+    <TitleBarRoot bordered={true} className={className}>
+      <TitleBarHeader className="justify-between relative">
+        <TitleBarTitle>{title}</TitleBarTitle>
+        <TitleBarWindowControls>
+          <TitleBarMinimize />
+          <TitleBarMaximize />
+          <TitleBarClose />
+        </TitleBarWindowControls>
+      </TitleBarHeader>
+      <div
+        className="diffline-container"
+        style={{ backgroundColor: "var(--color-bg-input)" }}
+      >
+        {children}
+      </div>
+    </TitleBarRoot>
+  );
+});
+
+DiffLineContainer.displayName = "DiffLineContainer";
 
 export { diffLineRoot };
 

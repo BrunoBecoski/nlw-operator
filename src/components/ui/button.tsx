@@ -6,16 +6,16 @@ const button = tv({
   variants: {
     variant: {
       hazmat: `
-        bg-accent-green text-black
-        border-2 border-t-accent-green-light border-l-accent-green-light border-r-accent-green-dark border-b-accent-green-dark
+        bg-hazmat-primary text-black
+        border-2 border-t-hazmat-light border-l-hazmat-light border-r-hazmat-dark border-b-hazmat-dark
         hover:brightness-110
-        active:border-t-accent-green-dark active:border-l-accent-green-dark active:border-r-accent-green-light active:border-b-accent-green-light
+        active:border-t-hazmat-dark active:border-l-hazmat-dark active:border-r-hazmat-light active:border-b-hazmat-light
       `,
       outline: `
-        bg-transparent text-accent-green
-        border-2 border-t-accent-green-light border-l-accent-green-light border-r-accent-green-dark border-b-accent-green-dark
-        hover:bg-accent-green/10
-        active:border-t-accent-green-dark active:border-l-accent-green-dark active:border-r-accent-green-light active:border-b-accent-green-light
+        bg-transparent text-hazmat-primary
+        border-2 border-t-hazmat-light border-l-hazmat-light border-r-hazmat-dark border-b-hazmat-dark
+        hover:bg-hazmat-primary/10
+        active:border-t-hazmat-dark active:border-l-hazmat-dark active:border-r-hazmat-light active:border-b-hazmat-light
       `,
     },
   },

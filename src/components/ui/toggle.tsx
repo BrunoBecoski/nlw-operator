@@ -82,7 +82,7 @@ const toggleLabel = tv({
   base: "text-xs font-mono font-bold uppercase transition-colors text-text-secondary",
   variants: {
     checked: {
-      true: "text-accent-green",
+      true: "text-hazmat-primary",
     },
   },
 });

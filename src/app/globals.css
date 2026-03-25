@@ -9,17 +9,17 @@
   --font-mono: var(--font-mono);
   --font-mono-secondary: var(--font-mono-secondary);
 
-  /* Accent Colors - Primary: Hazmat Yellow */
-  --color-accent-green: #f0c000;
-  --color-accent-green-light: #ffd700;
-  --color-accent-green-dark: #b8860b;
+  /* Hazmat Yellow - Primary */
+  --color-hazmat-primary: #f0c000;
+  --color-hazmat-light: #ffd700;
+  --color-hazmat-dark: #b8860b;
 
-  /* Radiation Dial Safe Zone - Original Green */
-  --color-radiation-safe: #c8ff00;
-  --color-radiation-safe-light: #e0ff4d;
-  --color-radiation-safe-dark: #9ab800;
+  /* Radiation Green - Neon Green */
+  --color-radiation-green: #c8ff00;
+  --color-radiation-green-light: #e0ff4d;
+  --color-radiation-green-dark: #9ab800;
 
-  /* Badge Good Status - Original Green */
+  /* Badge Good Status - Radiation Green */
   --color-badge-good: #c8ff00;
   --color-accent-red: #ef4444;
   --color-accent-amber: #f59e0b;
@@ -41,7 +41,6 @@
 
   /* Nuclear/Radiation Colors */
   --color-neon-green: #39ff14;
-  --color-hazmat-yellow: #c8ff00;
   --color-core-green: #00ff41;
   --color-warning-orange: #ff6b00;
   --color-radiation-purple: #9d00ff;
@@ -126,7 +125,7 @@ body {
 }
 
 .glow-hazmat {
-  box-shadow: 0 0 10px var(--color-accent-green), 0 0 20px var(--color-accent-green);
+  box-shadow: 0 0 10px var(--color-hazmat-primary), 0 0 20px var(--color-hazmat-primary);
 }
 
 .glow-green {
@@ -207,10 +206,10 @@ body {
 }
 
 .toggle-track.checked {
-  border-top-color: var(--color-accent-green-light);
-  border-left-color: var(--color-accent-green-light);
-  border-right-color: var(--color-accent-green-dark);
-  border-bottom-color: var(--color-accent-green-dark);
+  border-top-color: var(--color-hazmat-light);
+  border-left-color: var(--color-hazmat-light);
+  border-right-color: var(--color-hazmat-dark);
+  border-bottom-color: var(--color-hazmat-dark);
 }
 
 .toggle-knob {
@@ -224,11 +223,11 @@ body {
 }
 
 .toggle-knob.checked {
-  background-color: var(--color-accent-green);
-  border-top-color: var(--color-accent-green-light);
-  border-left-color: var(--color-accent-green-light);
-  border-right-color: var(--color-accent-green-dark);
-  border-bottom-color: var(--color-accent-green-dark);
+  background-color: var(--color-hazmat-primary);
+  border-top-color: var(--color-hazmat-light);
+  border-left-color: var(--color-hazmat-light);
+  border-right-color: var(--color-hazmat-dark);
+  border-bottom-color: var(--color-hazmat-dark);
 }
 
 /* Navbar Windows XP Style */
@@ -306,6 +305,33 @@ body {
   background: linear-gradient(180deg, #f0c000 0%, #b8860b 100%);
 }
 
+/* XP Borda 3D estilo Windows - apenas bordas superior e inferior */
+.xp-border-top-only {
+  position: relative;
+  border-top: 3px solid var(--color-hazmat-light);
+  border-bottom: 3px solid var(--color-hazmat-dark);
+}
+
+.xp-border-top-only::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(180deg, var(--color-hazmat-light) 0%, var(--color-hazmat-primary) 100%);
+}
+
+.xp-border-top-only::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(180deg, var(--color-hazmat-primary) 0%, var(--color-hazmat-dark) 100%);
+}
+
 /* XP Borda 3D estilo Windows - sombra em cima (escura), luz embaixo (clara) */
 .xp-border-bottom {
   position: relative;
@@ -361,12 +387,12 @@ body {
 .xp-copy-button {
   padding: 4px;
   border: 2px solid;
-  border-top-color: var(--color-accent-green-light);
-  border-left-color: var(--color-accent-green-light);
-  border-right-color: var(--color-accent-green-dark);
-  border-bottom-color: var(--color-accent-green-dark);
+  border-top-color: var(--color-hazmat-light);
+  border-left-color: var(--color-hazmat-light);
+  border-right-color: var(--color-hazmat-dark);
+  border-bottom-color: var(--color-hazmat-dark);
   border-radius: 2px;
-  background-color: var(--color-accent-green);
+  background-color: var(--color-hazmat-primary);
   cursor: pointer;
   color: #000000;
   transition: filter 0.1s;
@@ -377,18 +403,18 @@ body {
 }
 
 .xp-copy-button:active {
-  border-top-color: var(--color-accent-green-dark);
-  border-left-color: var(--color-accent-green-dark);
-  border-right-color: var(--color-accent-green-light);
-  border-bottom-color: var(--color-accent-green-light);
+  border-top-color: var(--color-hazmat-dark);
+  border-left-color: var(--color-hazmat-dark);
+  border-right-color: var(--color-hazmat-light);
+  border-bottom-color: var(--color-hazmat-light);
 }
 
 .xp-border-gold {
   border: 2px solid;
-  border-top-color: var(--color-accent-green-dark);
-  border-left-color: var(--color-accent-green-dark);
-  border-right-color: var(--color-accent-green-light);
-  border-bottom-color: var(--color-accent-green-light);
+  border-top-color: var(--color-hazmat-dark);
+  border-left-color: var(--color-hazmat-dark);
+  border-right-color: var(--color-hazmat-light);
+  border-bottom-color: var(--color-hazmat-light);
 }
 
 /* CodeBlock Border */
@@ -401,8 +427,12 @@ body {
 }
 
 /* DiffLine */
+.diffline-container {
+  overflow: hidden;
+}
+
 .diffline-root {
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--color-border-primary);
 }
 
 .diffline-root:last-child {

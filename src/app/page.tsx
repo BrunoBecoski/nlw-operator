@@ -37,7 +37,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-4xl font-bold text-accent-green">
+          <span className="font-mono text-4xl font-bold text-hazmat-primary">
             &gt;
           </span>
           <h1 className="font-mono text-4xl font-bold text-text-primary">
@@ -93,12 +93,12 @@ export default function Home() {
       {/* Leaderboard Preview */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
-          <h2 className="font-mono text-lg font-bold text-accent-green">
+          <h2 className="font-mono text-lg font-bold text-hazmat-primary">
             Top 3
           </h2>
           <Link
             href="/leaderboard"
-            className="inline-flex items-center justify-center whitespace-nowrap font-mono font-bold uppercase px-6 py-2 cursor-pointer transition-all duration-100 bg-transparent text-accent-green border-2 border-t-accent-green-light border-l-accent-green-light border-r-accent-green-dark border-b-accent-green-dark hover:bg-accent-green/10 rounded-sm"
+            className="inline-flex items-center justify-center whitespace-nowrap font-mono font-bold uppercase px-6 py-2 cursor-pointer transition-all duration-100 bg-transparent text-hazmat-primary border-2 border-t-hazmat-light border-l-hazmat-light border-r-hazmat-dark border-b-hazmat-dark hover:bg-hazmat-primary/10 rounded-sm"
           >
             view all &gt;&gt;
           </Link>

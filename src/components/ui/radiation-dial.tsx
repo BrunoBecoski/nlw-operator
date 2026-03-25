@@ -8,7 +8,7 @@ interface RadiationDialProps {
 type RadiationLevel = "safe" | "caution" | "danger";
 
 const ZONE_COLORS = {
-  safe: { fill: "var(--color-radiation-safe)", glow: "rgba(200,255,0,0.8)" },
+  safe: { fill: "var(--color-radiation-green)", glow: "rgba(200,255,0,0.8)" },
   caution: { fill: "var(--color-accent-amber)", glow: "rgba(245,158,11,0.8)" },
   danger: { fill: "var(--color-accent-red)", glow: "rgba(239,68,68,0.8)" },
 };
@@ -85,7 +85,7 @@ export function RadiationDialSm({
 
   return (
     <div
-      className={`${radiationDialSmRoot({ className })} flex items-center gap-2 h-[28px] xp-inset`}
+      className={`${radiationDialSmRoot({ className })} flex items-center gap-2 h-[28px] px-2 border-2 border-t-hazmat-light border-l-hazmat-light border-r-hazmat-dark border-b-hazmat-dark bg-bg-input`}
       {...props}
     >
       <span

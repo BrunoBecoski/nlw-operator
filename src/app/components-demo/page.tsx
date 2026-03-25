@@ -4,8 +4,23 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button, button } from "@/components/ui/button";
 import { CodeShell } from "@/components/ui/code-shell";
-import { DiffLine } from "@/components/ui/diff-line";
+import { DiffLine, DiffLineContainer } from "@/components/ui/diff-line";
 import { RadiationDial, RadiationDialSm } from "@/components/ui/radiation-dial";
+import {
+  TitleBarActions,
+  TitleBarClose,
+  TitleBarContent,
+  TitleBarHeader,
+  TitleBarLanguage,
+  TitleBarMaximize,
+  TitleBarMinimize,
+  TitleBarPosition,
+  TitleBarRoot,
+  TitleBarScore,
+  TitleBarSubtitle,
+  TitleBarTitle,
+  TitleBarWindowControls,
+} from "@/components/ui/title-bar";
 import { Toggle } from "@/components/ui/toggle";
 
 const MAX_PREVIEW_LINES = 3;
@@ -98,14 +113,16 @@ export default function ComponentsDemoPage() {
       <h1 className="text-3xl font-bold">UI Components Demo</h1>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-accent-green">Button</h2>
+        <h2 className="text-2xl font-semibold text-hazmat-primary">Button</h2>
         <p className="text-text-secondary">
           Componentes de botão com estilo Nuclear/Radiation.
         </p>
 
         <div className="space-y-8">
           <div className="space-y-3">
-            <h3 className="text-lg font-medium text-hazmat-yellow">Variants</h3>
+            <h3 className="text-lg font-medium text-radiation-green">
+              Variants
+            </h3>
             <div className="flex flex-wrap gap-4">
               {(
                 Object.keys(button.variants.variant) as Array<
@@ -120,7 +137,7 @@ export default function ComponentsDemoPage() {
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-lg font-medium text-hazmat-yellow">States</h3>
+            <h3 className="text-lg font-medium text-radiation-green">States</h3>
             <div className="flex flex-wrap gap-4">
               <Button>Default</Button>
               <Button disabled>Disabled</Button>
@@ -161,14 +178,16 @@ export default function ComponentsDemoPage() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-accent-green">CodeShell</h2>
+        <h2 className="text-2xl font-semibold text-hazmat-primary">
+          CodeShell
+        </h2>
         <p className="text-text-secondary">
           Componente de código unificado com 3 variantes.
         </p>
 
         <div className="space-y-8">
           <div className="space-y-3">
-            <h3 className="text-lg font-medium text-hazmat-yellow">
+            <h3 className="text-lg font-medium text-radiation-green">
               Editor (editável)
             </h3>
             <CodeShell
@@ -180,7 +199,7 @@ export default function ComponentsDemoPage() {
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-lg font-medium text-hazmat-yellow">
+            <h3 className="text-lg font-medium text-radiation-green">
               Display (somente leitura com score)
             </h3>
             <CodeShell
@@ -192,7 +211,7 @@ export default function ComponentsDemoPage() {
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-lg font-medium text-hazmat-yellow">
+            <h3 className="text-lg font-medium text-radiation-green">
               Preview (somente leitura sem score)
             </h3>
             <CodePreview
@@ -204,7 +223,7 @@ export default function ComponentsDemoPage() {
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-lg font-medium text-hazmat-yellow">
+            <h3 className="text-lg font-medium text-radiation-green">
               Preview (código longo com collapse)
             </h3>
             <CodePreview
@@ -243,26 +262,17 @@ function doEverything(data) {
           Linha de diff com indicadores de adição/remoção/contexto.
         </p>
 
-        <div
-          className="rounded-sm overflow-hidden"
-          style={{
-            border: "2px solid",
-            borderTopColor: "#555",
-            borderLeftColor: "#555",
-            borderRightColor: "#333",
-            borderBottomColor: "#333",
-          }}
-        >
+        <DiffLineContainer>
           <DiffLine type="removed">var total = 0;</DiffLine>
           <DiffLine type="added">const total = 0;</DiffLine>
           <DiffLine type="context">
             for (let i = 0; i &lt; items.length; i++) {"{"}
           </DiffLine>
-        </div>
+        </DiffLineContainer>
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-accent-green">
+        <h2 className="text-2xl font-semibold text-hazmat-primary">
           RadiationDial
         </h2>
         <p className="text-text-secondary">
@@ -270,7 +280,7 @@ function doEverything(data) {
         </p>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-hazmat-yellow">Full</h3>
+          <h3 className="text-lg font-medium text-radiation-green">Full</h3>
           <div className="flex flex-wrap items-center gap-8">
             <RadiationDial score={10} maxScore={10} />
             <RadiationDial score={8.7} maxScore={10} />
@@ -278,7 +288,7 @@ function doEverything(data) {
             <RadiationDial score={2} maxScore={10} />
           </div>
 
-          <h3 className="text-lg font-medium text-hazmat-yellow">
+          <h3 className="text-lg font-medium text-radiation-green">
             SM (para headers)
           </h3>
           <div className="flex flex-wrap items-center gap-8">
@@ -286,6 +296,105 @@ function doEverything(data) {
             <RadiationDialSm score={8.7} maxScore={10} />
             <RadiationDialSm score={5.1} maxScore={10} />
             <RadiationDialSm score={2} maxScore={10} />
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold text-hazmat-primary">TitleBar</h2>
+        <p className="text-text-secondary">
+          Container com barra de título estilo Windows XP.
+        </p>
+
+        <div className="space-y-8">
+          <div className="space-y-3">
+            <h3 className="text-lg font-medium text-radiation-green">Básico</h3>
+            <TitleBarRoot>
+              <TitleBarHeader>
+                <TitleBarTitle>Roast Result</TitleBarTitle>
+                <TitleBarWindowControls>
+                  <TitleBarMinimize />
+                  <TitleBarMaximize />
+                  <TitleBarClose />
+                </TitleBarWindowControls>
+              </TitleBarHeader>
+              <TitleBarContent className="p-4">
+                <p className="font-mono text-sm text-text-primary">
+                  Seu conteúdo aqui...
+                </p>
+              </TitleBarContent>
+            </TitleBarRoot>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-lg font-medium text-radiation-green">
+              Com Position, Language e Score
+            </h3>
+            <TitleBarRoot>
+              <TitleBarHeader className="justify-between">
+                <div className="flex items-center gap-2">
+                  <TitleBarPosition>#1</TitleBarPosition>
+                  <TitleBarScore score={9.5} />
+                </div>
+                <div className="flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
+                  <TitleBarLanguage>JavaScript</TitleBarLanguage>
+                </div>
+                <TitleBarWindowControls>
+                  <TitleBarMinimize />
+                  <TitleBarMaximize />
+                  <TitleBarClose />
+                </TitleBarWindowControls>
+              </TitleBarHeader>
+              <TitleBarContent className="p-4">
+                <p className="font-mono text-sm text-text-primary">
+                  Código bem estruturado com boas práticas.
+                </p>
+              </TitleBarContent>
+            </TitleBarRoot>
+
+            <TitleBarRoot>
+              <TitleBarHeader className="justify-between">
+                <div className="flex items-center gap-2">
+                  <TitleBarPosition>#2</TitleBarPosition>
+                  <TitleBarScore score={7.2} />
+                </div>
+                <div className="absolute left-1/2 -translate-x-1/2">
+                  <TitleBarLanguage>Python</TitleBarLanguage>
+                </div>
+                <TitleBarWindowControls>
+                  <TitleBarMinimize />
+                  <TitleBarMaximize />
+                  <TitleBarClose />
+                </TitleBarWindowControls>
+              </TitleBarHeader>
+              <TitleBarContent className="p-4">
+                <p className="font-mono text-sm text-text-primary">
+                  Código com alguns problemas de estilo.
+                </p>
+              </TitleBarContent>
+            </TitleBarRoot>
+
+            <TitleBarRoot>
+              <TitleBarHeader className="justify-between relative">
+                <div className="flex items-center gap-2">
+                  <TitleBarPosition>#3</TitleBarPosition>
+                  <TitleBarScore score={4.8} />
+                </div>
+                <div className="absolute left-1/2 -translate-x-1/2">
+                  <TitleBarLanguage>Rust</TitleBarLanguage>
+                </div>
+                <TitleBarWindowControls>
+                  <TitleBarMinimize />
+                  <TitleBarMaximize />
+                  <TitleBarClose />
+                </TitleBarWindowControls>
+              </TitleBarHeader>
+              <TitleBarContent className="p-4">
+                <p className="font-mono text-sm text-text-primary">
+                  Código com múltiplos problemas críticos.
+                </p>
+              </TitleBarContent>
+            </TitleBarRoot>
           </div>
         </div>
       </section>

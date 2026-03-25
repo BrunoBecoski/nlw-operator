@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { CodeShell } from "@/components/ui/code-shell";
-import { DiffLine } from "@/components/ui/diff-line";
+import { DiffLine, DiffLineContainer } from "@/components/ui/diff-line";
 import { RadiationDial } from "@/components/ui/radiation-dial";
 import { caller } from "@/trpc/server";
 
@@ -129,7 +129,7 @@ export default async function RoastResultPage({
         {/* Submitted Code Section */}
         <section className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-sm font-bold text-accent-green">
+            <span className="font-mono text-sm font-bold text-hazmat-primary">
               {"//"}
             </span>
             <h2 className="font-mono text-sm font-bold text-text-primary">
@@ -151,7 +151,7 @@ export default async function RoastResultPage({
         {/* Detailed Analysis Section */}
         <section className="flex flex-col gap-6">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-sm font-bold text-accent-green">
+            <span className="font-mono text-sm font-bold text-hazmat-primary">
               {"//"}
             </span>
             <h2 className="font-mono text-sm font-bold text-text-primary">
@@ -187,7 +187,7 @@ export default async function RoastResultPage({
 
             <section className="flex flex-col gap-6">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-sm font-bold text-accent-green">
+                <span className="font-mono text-sm font-bold text-hazmat-primary">
                   {"//"}
                 </span>
                 <h2 className="font-mono text-sm font-bold text-text-primary">
@@ -204,13 +204,13 @@ export default async function RoastResultPage({
                 </div>
 
                 {/* Diff Body */}
-                <div className="flex flex-col py-1">
+                <DiffLineContainer>
                   {diffLines.map((line, i) => (
                     <DiffLine key={`diff-${i.toString()}`} type={line.type}>
                       {line.content}
                     </DiffLine>
                   ))}
-                </div>
+                </DiffLineContainer>
               </div>
             </section>
           </>

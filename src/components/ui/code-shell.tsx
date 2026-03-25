@@ -4,12 +4,23 @@ import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 import { useShikiHighlighter } from "@/hooks/use-shiki-highlighter";
 import { RadiationDialSm } from "./radiation-dial";
+import {
+  TitleBarClose,
+  TitleBarHeader,
+  TitleBarLanguage,
+  TitleBarMaximize,
+  TitleBarMinimize,
+  TitleBarPosition,
+  TitleBarRoot,
+  TitleBarScore,
+  TitleBarWindowControls,
+} from "./title-bar";
 
 const codeShellRoot = tv({
   base: "rounded-sm overflow-hidden",
   variants: {
     bordered: {
-      true: "xp-border-gold",
+      true: "border-4 border-hazmat-primary",
     },
   },
   defaultVariants: {
@@ -38,116 +49,6 @@ export function CodeShellRoot({
   );
 }
 
-export interface CodeShellHeaderProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function CodeShellHeader({
-  className,
-  children,
-  ...props
-}: CodeShellHeaderProps) {
-  return (
-    <div
-      className={`flex items-center justify-between h-10 px-2 bg-accent-green xp-border-top ${className ?? ""}`}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-}
-
-export interface CodeShellLanguageBadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement> {
-  language?: string;
-}
-
-export function CodeShellLanguageBadge({
-  className,
-  language,
-  children,
-  ...props
-}: CodeShellLanguageBadgeProps) {
-  return (
-    <span
-      className={`language-badge font-mono text-xs ${className ?? ""}`}
-      {...props}
-    >
-      {children || language}
-    </span>
-  );
-}
-
-const codeShellScore = tv({
-  base: "flex items-center gap-1",
-});
-
-export interface CodeShellScoreProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  score?: number;
-  maxScore?: number;
-}
-
-export function CodeShellScore({
-  className,
-  score,
-  maxScore = 10,
-  ...props
-}: CodeShellScoreProps) {
-  if (score === undefined) return null;
-
-  return (
-    <div className={codeShellScore({ className })} {...props}>
-      <RadiationDialSm score={score} maxScore={maxScore} />
-    </div>
-  );
-}
-
-const codeShellCopyButton = tv({
-  base: "xp-copy-button",
-});
-
-export interface CodeShellCopyButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  onCopy?: () => void;
-}
-
-export const CodeShellCopyButton = forwardRef<
-  HTMLButtonElement,
-  CodeShellCopyButtonProps
->(({ className, onCopy, ...props }, ref) => {
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    onCopy?.();
-  };
-
-  return (
-    <button
-      ref={ref}
-      type="button"
-      className={codeShellCopyButton({ className })}
-      onClick={handleClick}
-      {...props}
-    >
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-label="Copy code"
-      >
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-      </svg>
-    </button>
-  );
-});
-
-CodeShellCopyButton.displayName = "CodeShellCopyButton";
-
 const codeShellContent = tv({
   base: "p-3 overflow-x-auto",
 });
@@ -172,7 +73,7 @@ export function CodeShellContent({
 }
 
 const codeShellTextarea = tv({
-  base: "w-full h-full bg-transparent font-mono text-sm text-text-primary resize-none focus:outline-none caret-accent-green",
+  base: "w-full h-full bg-transparent font-mono text-sm text-text-primary resize-none focus:outline-none caret-hazmat-primary",
 });
 
 export interface CodeShellTextareaProps
@@ -312,22 +213,26 @@ export function CodeShell({
       }}
     >
       {showHeader && (
-        <CodeShellHeader>
-          <div className="flex items-center gap-2">
-            {position !== undefined && (
-              <span className="font-mono text-sm text-black font-bold">
-                #{position}
-              </span>
-            )}
-            <CodeShellLanguageBadge language={language} />
-          </div>
-          <div className="flex items-center gap-2">
-            {score !== undefined && (
-              <CodeShellScore score={score} maxScore={maxScore} />
-            )}
-            <CodeShellCopyButton onClick={handleCopy} />
-          </div>
-        </CodeShellHeader>
+        <TitleBarRoot bordered={false}>
+          <TitleBarHeader className="justify-between relative">
+            <div className="flex items-center gap-2">
+              {position !== undefined && (
+                <TitleBarPosition>#{position}</TitleBarPosition>
+              )}
+              {score !== undefined && showScore && (
+                <TitleBarScore score={score} maxScore={maxScore} />
+              )}
+            </div>
+            <div className="absolute left-1/2 -translate-x-1/2">
+              <TitleBarLanguage>{effectiveLanguage}</TitleBarLanguage>
+            </div>
+            <TitleBarWindowControls>
+              <TitleBarMinimize />
+              <TitleBarMaximize />
+              <TitleBarClose />
+            </TitleBarWindowControls>
+          </TitleBarHeader>
+        </TitleBarRoot>
       )}
       <CodeShellContent>
         {editable && (

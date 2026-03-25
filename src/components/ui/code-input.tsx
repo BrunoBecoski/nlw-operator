@@ -50,7 +50,7 @@ export function CodeInputDots({ className, ...props }: CodeInputDotsProps) {
     <div className={codeInputDots({ className })} {...props}>
       <span className="h-2.5 w-2.5 rounded-full bg-accent-red" />
       <span className="h-2.5 w-2.5 rounded-full bg-accent-amber" />
-      <span className="h-2.5 w-2.5 rounded-full bg-accent-green" />
+      <span className="h-2.5 w-2.5 rounded-full bg-hazmat-primary" />
     </div>
   );
 }

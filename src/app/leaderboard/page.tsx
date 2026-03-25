@@ -14,7 +14,7 @@ export default function LeaderboardPage() {
       {/* Hero Section */}
       <section className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-3xl font-bold text-accent-green">
+          <span className="font-mono text-3xl font-bold text-hazmat-primary">
             &gt;
           </span>
           <h1 className="font-mono text-3xl font-bold text-text-primary">

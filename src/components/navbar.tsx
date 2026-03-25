@@ -5,12 +5,12 @@ export interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function Navbar({ className, ...props }: NavbarProps) {
   return (
     <nav
-      className={`flex items-center justify-between h-12 px-4 bg-accent-green ${className ?? ""} xp-border-bottom`}
+      className={`flex items-center justify-between h-12 px-4 bg-hazmat-primary ${className ?? ""} xp-border-bottom`}
       {...props}
     >
       <Link href="/" className="flex items-center gap-2 cursor-pointer">
         <span
-          className="text-xl text-accent-green"
+          className="text-xl text-black"
           role="img"
           aria-label="Radiation symbol"
         >
