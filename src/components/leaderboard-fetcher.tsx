@@ -9,6 +9,14 @@ import {
   LeaderboardEntryRow,
   LeaderboardFooter,
 } from "@/components/ui/leaderboard-table";
+import {
+  TitleBarControls,
+  TitleBarHeader,
+  TitleBarLanguage,
+  TitleBarPosition,
+  TitleBarRoot,
+  TitleBarScore,
+} from "@/components/ui/title-bar";
 
 interface LeaderboardItem {
   id: string;
@@ -44,30 +52,50 @@ function CodePreview({
 
   if (!isLongCode) {
     return (
-      <CodeShell
-        value={code}
-        language={lang}
-        position={position}
-        score={score}
-        showScore
-        bordered={true}
+      <button
+        type="button"
+        className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
         onClick={() => router.push(`/roast/${id}`)}
-      />
+      >
+        <TitleBarRoot>
+          <TitleBarHeader className="justify-between relative">
+            <div className="flex items-center gap-2">
+              <TitleBarPosition>#{position}</TitleBarPosition>
+              <TitleBarScore score={score} />
+            </div>
+            <div className="absolute left-1/2 -translate-x-1/2">
+              <TitleBarLanguage>{lang}</TitleBarLanguage>
+            </div>
+            <TitleBarControls />
+          </TitleBarHeader>
+          <CodeShell value={code} language={lang} />
+        </TitleBarRoot>
+      </button>
     );
   }
 
   if (isOpen) {
     return (
       <div>
-        <CodeShell
-          value={code}
-          language={lang}
-          position={position}
-          score={score}
-          showScore
-          bordered={true}
+        <button
+          type="button"
+          className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
           onClick={() => router.push(`/roast/${id}`)}
-        />
+        >
+          <TitleBarRoot>
+            <TitleBarHeader className="justify-between relative">
+              <div className="flex items-center gap-2">
+                <TitleBarPosition>#{position}</TitleBarPosition>
+                <TitleBarScore score={score} />
+              </div>
+              <div className="absolute left-1/2 -translate-x-1/2">
+                <TitleBarLanguage>{lang}</TitleBarLanguage>
+              </div>
+              <TitleBarControls />
+            </TitleBarHeader>
+            <CodeShell value={code} language={lang} />
+          </TitleBarRoot>
+        </button>
         <button
           type="button"
           onClick={(e) => {
@@ -84,15 +112,25 @@ function CodePreview({
 
   return (
     <div>
-      <CodeShell
-        value={previewCode}
-        language={lang}
-        position={position}
-        score={score}
-        showScore
-        bordered={true}
+      <button
+        type="button"
+        className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
         onClick={() => router.push(`/roast/${id}`)}
-      />
+      >
+        <TitleBarRoot>
+          <TitleBarHeader className="justify-between relative">
+            <div className="flex items-center gap-2">
+              <TitleBarPosition>#{position}</TitleBarPosition>
+              <TitleBarScore score={score} />
+            </div>
+            <div className="absolute left-1/2 -translate-x-1/2">
+              <TitleBarLanguage>{lang}</TitleBarLanguage>
+            </div>
+            <TitleBarControls />
+          </TitleBarHeader>
+          <CodeShell value={previewCode} language={lang} />
+        </TitleBarRoot>
+      </button>
       <button
         type="button"
         onClick={(e) => {

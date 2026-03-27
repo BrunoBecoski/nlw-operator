@@ -1,14 +1,5 @@
 import { forwardRef } from "react";
 import { tv } from "tailwind-variants";
-import {
-  TitleBarClose,
-  TitleBarHeader,
-  TitleBarMaximize,
-  TitleBarMinimize,
-  TitleBarRoot,
-  TitleBarTitle,
-  TitleBarWindowControls,
-} from "./title-bar";
 
 export type DiffType = "removed" | "added" | "context";
 
@@ -106,38 +97,20 @@ export const DiffLineRoot = forwardRef<HTMLDivElement, DiffLineRootProps>(
 DiffLineRoot.displayName = "DiffLineRoot";
 
 export interface DiffLineContainerProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  language?: string;
-}
+  extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const DiffLineContainer = forwardRef<
   HTMLDivElement,
   DiffLineContainerProps
->(({ className, language = "ts", children, ...props }, ref) => {
-  const extension = language
-    .toLowerCase()
-    .replace(/^.*\./, "")
-    .replace("typescript", "ts")
-    .replace("javascript", "js");
-  const title = `your_code.${extension} → improved_code.${extension}`;
-
+>(({ className, children }, ref) => {
   return (
-    <TitleBarRoot bordered={true} className={className}>
-      <TitleBarHeader className="justify-between relative">
-        <TitleBarTitle>{title}</TitleBarTitle>
-        <TitleBarWindowControls>
-          <TitleBarMinimize />
-          <TitleBarMaximize />
-          <TitleBarClose />
-        </TitleBarWindowControls>
-      </TitleBarHeader>
-      <div
-        className="diffline-container"
-        style={{ backgroundColor: "var(--color-bg-input)" }}
-      >
-        {children}
-      </div>
-    </TitleBarRoot>
+    <div
+      ref={ref}
+      className={className}
+      style={{ backgroundColor: "var(--color-bg-input)" }}
+    >
+      {children}
+    </div>
   );
 });
 

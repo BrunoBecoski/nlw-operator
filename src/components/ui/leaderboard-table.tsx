@@ -3,6 +3,14 @@
 import { useRouter } from "next/navigation";
 import { tv } from "tailwind-variants";
 import { CodeShell } from "@/components/ui/code-shell";
+import {
+  TitleBarControls,
+  TitleBarHeader,
+  TitleBarLanguage,
+  TitleBarPosition,
+  TitleBarRoot,
+  TitleBarScore,
+} from "@/components/ui/title-bar";
 
 const leaderboardRoot = tv({
   base: "flex flex-col rounded-sm overflow-hidden",
@@ -108,7 +116,7 @@ export interface LeaderboardItem {
 }
 
 const leaderboardEntryRow = tv({
-  base: "flex flex-col rounded-sm overflow-hidden border-2",
+  base: "flex flex-col rounded-sm overflow-hidden",
 });
 
 export interface LeaderboardEntryRowProps
@@ -191,16 +199,30 @@ export function LeaderboardTable({
     <div className="flex flex-col gap-5">
       {items.map((item) => (
         <LeaderboardEntryRow key={item.rank}>
-          <CodeShell
-            value={item.code}
-            language={item.lang || "javascript"}
-            position={item.rank}
-            score={item.score}
-            maxScore={maxScore}
-            showScore
-            bordered={false}
+          <button
+            type="button"
+            className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
             onClick={() => router.push(`/roast/${item.id}`)}
-          />
+          >
+            <TitleBarRoot>
+              <TitleBarHeader className="justify-between relative">
+                <div className="flex items-center gap-2">
+                  <TitleBarPosition>#{item.rank}</TitleBarPosition>
+                  <TitleBarScore score={item.score} maxScore={maxScore} />
+                </div>
+                <div className="absolute left-1/2 -translate-x-1/2">
+                  <TitleBarLanguage>
+                    {item.lang || "javascript"}
+                  </TitleBarLanguage>
+                </div>
+                <TitleBarControls />
+              </TitleBarHeader>
+              <CodeShell
+                value={item.code}
+                language={item.lang || "javascript"}
+              />
+            </TitleBarRoot>
+          </button>
         </LeaderboardEntryRow>
       ))}
       {totalCount && (

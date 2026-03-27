@@ -8,6 +8,12 @@ import ShameLeaderboard from "@/components/shame-leaderboard";
 import StatsBar from "@/components/stats-bar";
 import { Button } from "@/components/ui/button";
 import { CodeShell } from "@/components/ui/code-shell";
+import {
+  TitleBarControls,
+  TitleBarHeader,
+  TitleBarLanguage,
+  TitleBarRoot,
+} from "@/components/ui/title-bar";
 import { Toggle } from "@/components/ui/toggle";
 import { useLanguageDetection } from "@/hooks/use-language-detection";
 import { useTRPC } from "@/trpc/client";
@@ -52,14 +58,23 @@ export default function Home() {
       </section>
 
       {/* Code Editor */}
-      <CodeShell
-        value={code}
-        onChange={setCode}
-        language={resolvedLanguage}
-        onLanguageChange={setManualLanguage}
-        detectedLanguage={detectedLanguage}
-        editable
-      />
+      <TitleBarRoot>
+        <TitleBarHeader className="justify-between relative">
+          <div />
+          <div className="absolute left-1/2 -translate-x-1/2">
+            <TitleBarLanguage>{resolvedLanguage}</TitleBarLanguage>
+          </div>
+          <TitleBarControls />
+        </TitleBarHeader>
+        <CodeShell
+          value={code}
+          onChange={setCode}
+          language={resolvedLanguage}
+          onLanguageChange={setManualLanguage}
+          detectedLanguage={detectedLanguage}
+          editable
+        />
+      </TitleBarRoot>
 
       {/* Actions Bar */}
       <section className="flex items-center justify-between">

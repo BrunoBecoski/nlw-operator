@@ -3,6 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { CodeShell } from "@/components/ui/code-shell";
 import { DiffLine, DiffLineContainer } from "@/components/ui/diff-line";
 import { RadiationDial } from "@/components/ui/radiation-dial";
+import {
+  TitleBarControls,
+  TitleBarHeader,
+  TitleBarLanguage,
+  TitleBarRoot,
+  TitleBarScore,
+  TitleBarTitle,
+} from "@/components/ui/title-bar";
 import { caller } from "@/trpc/server";
 
 export async function generateMetadata({
@@ -137,12 +145,16 @@ export default async function RoastResultPage({
             </h2>
           </div>
 
-          <CodeShell
-            value={roast.code}
-            language={roast.language}
-            score={roast.score}
-            showScore
-          />
+          <TitleBarRoot>
+            <TitleBarHeader className="justify-between relative">
+              <TitleBarScore score={roast.score} />
+              <div className="absolute left-1/2 -translate-x-1/2">
+                <TitleBarLanguage>{roast.language}</TitleBarLanguage>
+              </div>
+              <TitleBarControls />
+            </TitleBarHeader>
+            <CodeShell value={roast.code} language={roast.language} />
+          </TitleBarRoot>
         </section>
 
         {/* Divider */}
@@ -195,15 +207,13 @@ export default async function RoastResultPage({
                 </h2>
               </div>
 
-              <div className="border border-border-primary bg-bg-input overflow-hidden">
-                {/* Diff Header */}
-                <div className="flex items-center gap-2 h-10 px-4 border-b border-border-primary">
-                  <span className="font-mono text-xs font-medium text-text-secondary">
+              <TitleBarRoot>
+                <TitleBarHeader className="justify-between relative">
+                  <TitleBarTitle>
                     your_code.{roast.language} → improved_code.{roast.language}
-                  </span>
-                </div>
-
-                {/* Diff Body */}
+                  </TitleBarTitle>
+                  <TitleBarControls />
+                </TitleBarHeader>
                 <DiffLineContainer>
                   {diffLines.map((line, i) => (
                     <DiffLine key={`diff-${i.toString()}`} type={line.type}>
@@ -211,7 +221,7 @@ export default async function RoastResultPage({
                     </DiffLine>
                   ))}
                 </DiffLineContainer>
-              </div>
+              </TitleBarRoot>
             </section>
           </>
         )}

@@ -1,46 +1,24 @@
 "use client";
 
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { tv, type VariantProps } from "tailwind-variants";
+import { tv } from "tailwind-variants";
 import { useShikiHighlighter } from "@/hooks/use-shiki-highlighter";
-import { RadiationDialSm } from "./radiation-dial";
-import {
-  TitleBarClose,
-  TitleBarHeader,
-  TitleBarLanguage,
-  TitleBarMaximize,
-  TitleBarMinimize,
-  TitleBarPosition,
-  TitleBarRoot,
-  TitleBarScore,
-  TitleBarWindowControls,
-} from "./title-bar";
 
 const codeShellRoot = tv({
   base: "rounded-sm overflow-hidden",
-  variants: {
-    bordered: {
-      true: "border-4 border-hazmat-primary",
-    },
-  },
-  defaultVariants: {
-    bordered: true,
-  },
 });
 
 export interface CodeShellRootProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof codeShellRoot> {}
+  extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function CodeShellRoot({
   className,
-  bordered,
   children,
   ...props
 }: CodeShellRootProps) {
   return (
     <div
-      className={codeShellRoot({ bordered, className })}
+      className={codeShellRoot({ className })}
       style={{ backgroundColor: "var(--color-bg-surface)" }}
       {...props}
     >
@@ -137,13 +115,7 @@ export interface CodeShellProps {
   placeholder?: string;
   onLanguageChange?: (language: string) => void;
   detectedLanguage?: string | null;
-  score?: number;
-  maxScore?: number;
-  showScore?: boolean;
-  showHeader?: boolean;
-  position?: number;
   editable?: boolean;
-  bordered?: boolean;
   onClick?: () => void;
   className?: string;
 }
@@ -154,13 +126,7 @@ export function CodeShell({
   onChange,
   placeholder = "// paste your code here...",
   detectedLanguage,
-  score,
-  maxScore = 10,
-  showScore = false,
-  showHeader = true,
-  position,
   editable = false,
-  bordered = true,
   onClick,
   className,
 }: CodeShellProps) {
@@ -196,46 +162,17 @@ export function CodeShell({
     ? highlightedHtml.replace(/^<pre[^>]*>|<\/pre>$/g, "")
     : "";
 
-  const handleCopy = useCallback(() => {
-    if (value) {
-      navigator.clipboard.writeText(value);
-    }
-  }, [value]);
-
   return (
     <CodeShellRoot
       className={`${onClick ? "hover:cursor-pointer hover:opacity-90" : ""} ${className ?? ""}`}
-      bordered={bordered}
       onClick={(e) => {
         if (e.target instanceof HTMLElement && !e.target.closest("button")) {
           onClick?.();
         }
       }}
     >
-      {showHeader && (
-        <TitleBarRoot bordered={false}>
-          <TitleBarHeader className="justify-between relative">
-            <div className="flex items-center gap-2">
-              {position !== undefined && (
-                <TitleBarPosition>#{position}</TitleBarPosition>
-              )}
-              {score !== undefined && showScore && (
-                <TitleBarScore score={score} maxScore={maxScore} />
-              )}
-            </div>
-            <div className="absolute left-1/2 -translate-x-1/2">
-              <TitleBarLanguage>{effectiveLanguage}</TitleBarLanguage>
-            </div>
-            <TitleBarWindowControls>
-              <TitleBarMinimize />
-              <TitleBarMaximize />
-              <TitleBarClose />
-            </TitleBarWindowControls>
-          </TitleBarHeader>
-        </TitleBarRoot>
-      )}
       <CodeShellContent>
-        {editable && (
+        {editable ? (
           <div className="relative w-full h-[360px]">
             <CodeShellHighlight
               ref={highlightRef}
@@ -255,8 +192,7 @@ export function CodeShell({
               className="absolute inset-0 w-full h-full p-3"
             />
           </div>
-        )}
-        {!editable && displayHtml ? (
+        ) : displayHtml ? (
           <CodeShellHighlight
             dangerouslySetInnerHTML={{ __html: displayHtml }}
           />

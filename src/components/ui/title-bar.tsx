@@ -1,11 +1,10 @@
 "use client";
 
-import { forwardRef } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 import { RadiationDialSm } from "./radiation-dial";
 
 const titleBarRoot = tv({
-  base: "overflow-hidden",
+  base: "overflow-hidden rounded-sm",
   variants: {
     bordered: {
       true: "border-4 border-hazmat-primary",
@@ -76,19 +75,6 @@ export function TitleBarSubtitle({
   );
 }
 
-export interface TitleBarContentProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function TitleBarContent({ className, ...props }: TitleBarContentProps) {
-  return (
-    <div
-      className={className}
-      style={{ backgroundColor: "var(--color-bg-input)" }}
-      {...props}
-    />
-  );
-}
-
 export interface TitleBarActionsProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -146,90 +132,71 @@ export function TitleBarScore({
   );
 }
 
-export interface TitleBarWindowControlsProps
+export interface TitleBarControlsProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function TitleBarWindowControls({
-  className,
-  ...props
-}: TitleBarWindowControlsProps) {
+export function TitleBarControls({ className }: TitleBarControlsProps) {
   return (
-    <div className={`flex items-center gap-1 ${className ?? ""}`} {...props} />
-  );
-}
-
-const titleBarWindowButton = tv({
-  base: "p-1 hover:brightness-90 active:brightness-75 cursor-pointer transition-all rounded-sm",
-});
-
-export interface TitleBarWindowButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
-
-export function TitleBarWindowButton({
-  className,
-  ...props
-}: TitleBarWindowButtonProps) {
-  return (
-    <button
-      type="button"
-      className={titleBarWindowButton({ className })}
-      {...props}
-    />
-  );
-}
-
-export function TitleBarMinimize() {
-  return (
-    <TitleBarWindowButton className="bg-black/20 hover:bg-black/30">
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
+    <div className={`flex items-center gap-1 ${className ?? ""}`}>
+      <button
+        type="button"
+        className="p-1 bg-black/20 hover:bg-black/30 active:brightness-75 cursor-pointer transition-all rounded-sm"
+        title="Minimizar"
+        aria-label="Minimizar"
       >
-        <line x1="2" y1="6" x2="10" y2="6" />
-      </svg>
-    </TitleBarWindowButton>
-  );
-}
-
-export function TitleBarMaximize() {
-  return (
-    <TitleBarWindowButton className="bg-black/20 hover:bg-black/30">
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        <svg
+          aria-hidden="true"
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        >
+          <line x1="2" y1="6" x2="10" y2="6" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        className="p-1 bg-black/20 hover:bg-black/30 active:brightness-75 cursor-pointer transition-all rounded-sm"
+        title="Maximizar"
+        aria-label="Maximizar"
       >
-        <rect x="2" y="2" width="8" height="8" rx="0.5" />
-      </svg>
-    </TitleBarWindowButton>
-  );
-}
-
-export function TitleBarClose() {
-  return (
-    <TitleBarWindowButton className="bg-black/20 hover:bg-red-600">
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
+        <svg
+          aria-hidden="true"
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="2" y="2" width="8" height="8" rx="0.5" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        className="p-1 bg-black/20 hover:bg-red-600 active:brightness-75 cursor-pointer transition-all rounded-sm"
+        title="Fechar"
+        aria-label="Fechar"
       >
-        <line x1="2" y1="2" x2="10" y2="10" />
-        <line x1="10" y1="2" x2="2" y2="10" />
-      </svg>
-    </TitleBarWindowButton>
+        <svg
+          aria-hidden="true"
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        >
+          <line x1="2" y1="2" x2="10" y2="10" />
+          <line x1="10" y1="2" x2="2" y2="10" />
+        </svg>
+      </button>
+    </div>
   );
 }

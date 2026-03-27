@@ -7,35 +7,19 @@ import { CodeShell } from "@/components/ui/code-shell";
 import { DiffLine, DiffLineContainer } from "@/components/ui/diff-line";
 import { RadiationDial, RadiationDialSm } from "@/components/ui/radiation-dial";
 import {
-  TitleBarActions,
-  TitleBarClose,
-  TitleBarContent,
+  TitleBarControls,
   TitleBarHeader,
   TitleBarLanguage,
-  TitleBarMaximize,
-  TitleBarMinimize,
   TitleBarPosition,
   TitleBarRoot,
   TitleBarScore,
-  TitleBarSubtitle,
   TitleBarTitle,
-  TitleBarWindowControls,
 } from "@/components/ui/title-bar";
 import { Toggle } from "@/components/ui/toggle";
 
 const MAX_PREVIEW_LINES = 3;
 
-function CodePreview({
-  code,
-  lang,
-  position,
-  score,
-}: {
-  code: string;
-  lang: string;
-  position?: number;
-  score?: number;
-}) {
+function CodePreview({ code, lang }: { code: string; lang: string }) {
   const lines = code.split("\n");
   const isLongCode = lines.length > MAX_PREVIEW_LINES;
   const [isOpen, setIsOpen] = useState(false);
@@ -43,27 +27,13 @@ function CodePreview({
   const previewCode = lines.slice(0, MAX_PREVIEW_LINES).join("\n");
 
   if (!isLongCode) {
-    return (
-      <CodeShell
-        value={code}
-        language={lang}
-        position={position}
-        score={score}
-        showScore
-      />
-    );
+    return <CodeShell value={code} language={lang} />;
   }
 
   if (isOpen) {
     return (
       <div>
-        <CodeShell
-          value={code}
-          language={lang}
-          position={position}
-          score={score}
-          showScore
-        />
+        <CodeShell value={code} language={lang} />
         <button
           type="button"
           onClick={() => setIsOpen(false)}
@@ -77,13 +47,7 @@ function CodePreview({
 
   return (
     <div>
-      <CodeShell
-        value={previewCode}
-        language={lang}
-        position={position}
-        score={score}
-        showScore
-      />
+      <CodeShell value={previewCode} language={lang} />
       <button
         type="button"
         onClick={() => setIsOpen(true)}
@@ -200,26 +164,16 @@ export default function ComponentsDemoPage() {
 
           <div className="space-y-3">
             <h3 className="text-lg font-medium text-radiation-green">
-              Display (somente leitura com score)
+              Display (somente leitura)
             </h3>
-            <CodeShell
-              value={sampleCode}
-              language="javascript"
-              score={8.5}
-              showScore
-            />
+            <CodeShell value={sampleCode} language="javascript" />
           </div>
 
           <div className="space-y-3">
             <h3 className="text-lg font-medium text-radiation-green">
-              Preview (somente leitura sem score)
+              Preview (somente leitura)
             </h3>
-            <CodePreview
-              code={sampleCode}
-              lang="javascript"
-              position={1}
-              score={8.7}
-            />
+            <CodePreview code={sampleCode} lang="javascript" />
           </div>
 
           <div className="space-y-3">
@@ -249,8 +203,6 @@ function doEverything(data) {
   return { result, processed, valid };
 }`}
               lang="javascript"
-              position={2}
-              score={6.3}
             />
           </div>
         </div>
@@ -312,17 +264,9 @@ function doEverything(data) {
             <TitleBarRoot>
               <TitleBarHeader>
                 <TitleBarTitle>Roast Result</TitleBarTitle>
-                <TitleBarWindowControls>
-                  <TitleBarMinimize />
-                  <TitleBarMaximize />
-                  <TitleBarClose />
-                </TitleBarWindowControls>
+                <TitleBarControls />
               </TitleBarHeader>
-              <TitleBarContent className="p-4">
-                <p className="font-mono text-sm text-text-primary">
-                  Seu conteúdo aqui...
-                </p>
-              </TitleBarContent>
+              <CodeShell value="// Seu código aqui..." language="javascript" />
             </TitleBarRoot>
           </div>
 
@@ -331,29 +275,24 @@ function doEverything(data) {
               Com Position, Language e Score
             </h3>
             <TitleBarRoot>
-              <TitleBarHeader className="justify-between">
+              <TitleBarHeader className="justify-between relative">
                 <div className="flex items-center gap-2">
                   <TitleBarPosition>#1</TitleBarPosition>
                   <TitleBarScore score={9.5} />
                 </div>
-                <div className="flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
+                <div className="absolute left-1/2 -translate-x-1/2">
                   <TitleBarLanguage>JavaScript</TitleBarLanguage>
                 </div>
-                <TitleBarWindowControls>
-                  <TitleBarMinimize />
-                  <TitleBarMaximize />
-                  <TitleBarClose />
-                </TitleBarWindowControls>
+                <TitleBarControls />
               </TitleBarHeader>
-              <TitleBarContent className="p-4">
-                <p className="font-mono text-sm text-text-primary">
-                  Código bem estruturado com boas práticas.
-                </p>
-              </TitleBarContent>
+              <CodeShell
+                value="// Código bem estruturado com boas práticas"
+                language="javascript"
+              />
             </TitleBarRoot>
 
             <TitleBarRoot>
-              <TitleBarHeader className="justify-between">
+              <TitleBarHeader className="justify-between relative">
                 <div className="flex items-center gap-2">
                   <TitleBarPosition>#2</TitleBarPosition>
                   <TitleBarScore score={7.2} />
@@ -361,17 +300,12 @@ function doEverything(data) {
                 <div className="absolute left-1/2 -translate-x-1/2">
                   <TitleBarLanguage>Python</TitleBarLanguage>
                 </div>
-                <TitleBarWindowControls>
-                  <TitleBarMinimize />
-                  <TitleBarMaximize />
-                  <TitleBarClose />
-                </TitleBarWindowControls>
+                <TitleBarControls />
               </TitleBarHeader>
-              <TitleBarContent className="p-4">
-                <p className="font-mono text-sm text-text-primary">
-                  Código com alguns problemas de estilo.
-                </p>
-              </TitleBarContent>
+              <CodeShell
+                value="# Código com alguns problemas de estilo"
+                language="python"
+              />
             </TitleBarRoot>
 
             <TitleBarRoot>
@@ -383,17 +317,12 @@ function doEverything(data) {
                 <div className="absolute left-1/2 -translate-x-1/2">
                   <TitleBarLanguage>Rust</TitleBarLanguage>
                 </div>
-                <TitleBarWindowControls>
-                  <TitleBarMinimize />
-                  <TitleBarMaximize />
-                  <TitleBarClose />
-                </TitleBarWindowControls>
+                <TitleBarControls />
               </TitleBarHeader>
-              <TitleBarContent className="p-4">
-                <p className="font-mono text-sm text-text-primary">
-                  Código com múltiplos problemas críticos.
-                </p>
-              </TitleBarContent>
+              <CodeShell
+                value="// Código com múltiplos problemas críticos"
+                language="rust"
+              />
             </TitleBarRoot>
           </div>
         </div>
