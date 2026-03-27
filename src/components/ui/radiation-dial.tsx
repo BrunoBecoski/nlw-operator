@@ -8,9 +8,21 @@ interface RadiationDialProps {
 type RadiationLevel = "safe" | "caution" | "danger";
 
 const ZONE_COLORS = {
-  safe: { fill: "var(--color-radiation-green)", glow: "rgba(200,255,0,0.8)" },
-  caution: { fill: "var(--color-accent-amber)", glow: "rgba(245,158,11,0.8)" },
-  danger: { fill: "var(--color-accent-red)", glow: "rgba(239,68,68,0.8)" },
+  safe: {
+    fill: "var(--color-radiation-green)",
+    glow: "rgba(200,255,0,0.8)",
+    border: "var(--color-radiation-green)",
+  },
+  caution: {
+    fill: "var(--color-accent-amber)",
+    glow: "rgba(245,158,11,0.8)",
+    border: "var(--color-accent-amber)",
+  },
+  danger: {
+    fill: "var(--color-accent-red)",
+    glow: "rgba(239,68,68,0.8)",
+    border: "var(--color-accent-red)",
+  },
 };
 
 const getRadiationLevel = (percentage: number): RadiationLevel => {
@@ -85,18 +97,23 @@ export function RadiationDialSm({
 
   return (
     <div
-      className={`${radiationDialSmRoot({ className })} flex items-center gap-2 h-[28px] px-2 border-2 border-t-hazmat-light border-l-hazmat-light border-r-hazmat-dark border-b-hazmat-dark bg-bg-input`}
+      className={`${radiationDialSmRoot({ className })} inline-flex items-center gap-2 font-mono text-sm font-bold uppercase px-3 h-8 bg-bg-surface rounded-sm`}
       {...props}
     >
       <span
-        className="font-mono font-bold text-[11px]"
-        style={{ color: levelColor.fill }}
+        className={
+          level === "danger"
+            ? "text-accent-red"
+            : level === "caution"
+              ? "text-accent-amber"
+              : "text-[var(--color-badge-good)]"
+        }
       >
         {score}
       </span>
       <svg
-        width={28}
-        height={28}
+        width={40}
+        height={26}
         viewBox="0 0 50 40"
         className="overflow-visible shrink-0"
         role="img"
@@ -105,7 +122,7 @@ export function RadiationDialSm({
         <path
           d={arcPath(-180, 0, radius)}
           fill="none"
-          stroke="#1a1a1a"
+          stroke="#333"
           strokeWidth={2}
           strokeLinecap="round"
         />
@@ -113,21 +130,21 @@ export function RadiationDialSm({
         <path
           d={arcPath(-180, -120, radius)}
           fill="none"
-          stroke={ZONE_COLORS.danger.fill}
+          stroke="var(--color-accent-red)"
           strokeWidth={2}
           strokeLinecap="round"
         />
         <path
           d={arcPath(-120, -60, radius)}
           fill="none"
-          stroke={ZONE_COLORS.caution.fill}
+          stroke="var(--color-accent-amber)"
           strokeWidth={2}
           strokeLinecap="round"
         />
         <path
           d={arcPath(-60, 0, radius)}
           fill="none"
-          stroke={ZONE_COLORS.safe.fill}
+          stroke="var(--color-badge-good)"
           strokeWidth={2}
           strokeLinecap="round"
         />

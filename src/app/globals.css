@@ -276,62 +276,6 @@ body {
   background: linear-gradient(180deg, #f0c000 0%, #ffd700 100%);
 }
 
-/* XP Borda 3D estilo Windows - luz em cima (clara), sombra embaixo (escura) */
-.xp-border-top {
-  position: relative;
-  border-left: 1px solid #b8860b;
-  border-right: 1px solid #ffd700;
-  border-top: 3px solid #ffd700;
-  border-bottom: 3px solid #b8860b;
-}
-
-.xp-border-top::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(180deg, #ffd700 0%, #f0c000 100%);
-}
-
-.xp-border-top::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(180deg, #f0c000 0%, #b8860b 100%);
-}
-
-/* XP Borda 3D estilo Windows - apenas bordas superior e inferior */
-.xp-border-top-only {
-  position: relative;
-  border-top: 3px solid var(--color-hazmat-light);
-  border-bottom: 3px solid var(--color-hazmat-dark);
-}
-
-.xp-border-top-only::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(180deg, var(--color-hazmat-light) 0%, var(--color-hazmat-primary) 100%);
-}
-
-.xp-border-top-only::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(180deg, var(--color-hazmat-primary) 0%, var(--color-hazmat-dark) 100%);
-}
-
 /* XP Borda 3D estilo Windows - sombra em cima (escura), luz embaixo (clara) */
 .xp-border-bottom {
   position: relative;
@@ -403,14 +347,6 @@ body {
 }
 
 .xp-copy-button:active {
-  border-top-color: var(--color-hazmat-dark);
-  border-left-color: var(--color-hazmat-dark);
-  border-right-color: var(--color-hazmat-light);
-  border-bottom-color: var(--color-hazmat-light);
-}
-
-.xp-border-gold {
-  border: 2px solid;
   border-top-color: var(--color-hazmat-dark);
   border-left-color: var(--color-hazmat-dark);
   border-right-color: var(--color-hazmat-light);

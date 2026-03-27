@@ -9,6 +9,7 @@ import {
   LeaderboardEntryRow,
   LeaderboardFooter,
 } from "@/components/ui/leaderboard-table";
+import type { TitleBarColor } from "@/components/ui/title-bar";
 import {
   TitleBarControls,
   TitleBarHeader,
@@ -17,6 +18,7 @@ import {
   TitleBarRoot,
   TitleBarScore,
 } from "@/components/ui/title-bar";
+import { useTRPC } from "@/trpc/client";
 
 interface LeaderboardItem {
   id: string;
@@ -26,7 +28,11 @@ interface LeaderboardItem {
   lang: string;
 }
 
-import { useTRPC } from "@/trpc/client";
+const getScoreColor = (score: number): TitleBarColor => {
+  if (score < 3.3) return "red";
+  if (score < 6.6) return "orange";
+  return "green";
+};
 
 const MAX_PREVIEW_LINES = 3;
 
@@ -51,16 +57,17 @@ function CodePreview({
   const previewCode = lines.slice(0, MAX_PREVIEW_LINES).join("\n");
 
   if (!isLongCode) {
+    const color = getScoreColor(score ?? 0);
     return (
       <button
         type="button"
         className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
         onClick={() => router.push(`/roast/${id}`)}
       >
-        <TitleBarRoot>
-          <TitleBarHeader className="justify-between relative">
+        <TitleBarRoot color={color}>
+          <TitleBarHeader color={color} className="justify-between relative">
             <div className="flex items-center gap-2">
-              <TitleBarPosition>#{position}</TitleBarPosition>
+              <TitleBarPosition color={color}>#{position}</TitleBarPosition>
               <TitleBarScore score={score} />
             </div>
             <div className="absolute left-1/2 -translate-x-1/2">
@@ -75,6 +82,7 @@ function CodePreview({
   }
 
   if (isOpen) {
+    const color = getScoreColor(score ?? 0);
     return (
       <div>
         <button
@@ -82,10 +90,10 @@ function CodePreview({
           className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
           onClick={() => router.push(`/roast/${id}`)}
         >
-          <TitleBarRoot>
-            <TitleBarHeader className="justify-between relative">
+          <TitleBarRoot color={color}>
+            <TitleBarHeader color={color} className="justify-between relative">
               <div className="flex items-center gap-2">
-                <TitleBarPosition>#{position}</TitleBarPosition>
+                <TitleBarPosition color={color}>#{position}</TitleBarPosition>
                 <TitleBarScore score={score} />
               </div>
               <div className="absolute left-1/2 -translate-x-1/2">
@@ -117,10 +125,15 @@ function CodePreview({
         className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
         onClick={() => router.push(`/roast/${id}`)}
       >
-        <TitleBarRoot>
-          <TitleBarHeader className="justify-between relative">
+        <TitleBarRoot color={getScoreColor(score ?? 0)}>
+          <TitleBarHeader
+            color={getScoreColor(score ?? 0)}
+            className="justify-between relative"
+          >
             <div className="flex items-center gap-2">
-              <TitleBarPosition>#{position}</TitleBarPosition>
+              <TitleBarPosition color={getScoreColor(score ?? 0)}>
+                #{position}
+              </TitleBarPosition>
               <TitleBarScore score={score} />
             </div>
             <div className="absolute left-1/2 -translate-x-1/2">

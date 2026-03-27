@@ -1,33 +1,39 @@
 "use client";
 
-import { tv, type VariantProps } from "tailwind-variants";
+import { tv } from "tailwind-variants";
 import { RadiationDialSm } from "./radiation-dial";
+
+export type TitleBarColor = "hazmat" | "red" | "orange" | "green";
 
 const titleBarRoot = tv({
   base: "overflow-hidden rounded-sm",
   variants: {
-    bordered: {
-      true: "border-4 border-hazmat-primary",
+    color: {
+      hazmat: "border-4 border-hazmat-primary/80",
+      red: "border-4 border-accent-red/80",
+      orange: "border-4 border-accent-amber/80",
+      green: "border-4 border-radiation-green/80",
     },
   },
   defaultVariants: {
-    bordered: true,
+    color: "hazmat",
   },
 });
 
 export interface TitleBarRootProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof titleBarRoot> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  color?: TitleBarColor;
+}
 
 export function TitleBarRoot({
   className,
-  bordered,
+  color = "hazmat",
   children,
   ...props
 }: TitleBarRootProps) {
   return (
     <div
-      className={titleBarRoot({ bordered, className })}
+      className={titleBarRoot({ color, className })}
       style={{ backgroundColor: "var(--color-bg-surface)" }}
       {...props}
     >
@@ -36,13 +42,34 @@ export function TitleBarRoot({
   );
 }
 
-export interface TitleBarHeaderProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+const headerStyles = tv({
+  base: "flex items-center h-10 px-2",
+  variants: {
+    color: {
+      hazmat: "bg-hazmat-primary/80 text-black",
+      red: "bg-accent-red/80 text-white",
+      orange: "bg-accent-amber/80 text-black",
+      green: "bg-radiation-green/80 text-black",
+    },
+  },
+  defaultVariants: {
+    color: "hazmat",
+  },
+});
 
-export function TitleBarHeader({ className, ...props }: TitleBarHeaderProps) {
+export interface TitleBarHeaderProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  color?: TitleBarColor;
+}
+
+export function TitleBarHeader({
+  className,
+  color = "hazmat",
+  ...props
+}: TitleBarHeaderProps) {
   return (
     <div
-      className={`flex items-center h-10 px-2 bg-hazmat-primary xp-border-top-only ${className ?? ""}`}
+      className={`${headerStyles({ color })} ${className ?? ""}`}
       {...props}
     />
   );
@@ -54,7 +81,7 @@ export interface TitleBarTitleProps
 export function TitleBarTitle({ className, ...props }: TitleBarTitleProps) {
   return (
     <h3
-      className={`font-mono text-sm text-black font-bold ${className ?? ""}`}
+      className={`font-mono text-sm font-bold ${className ?? ""}`}
       {...props}
     />
   );
@@ -69,7 +96,7 @@ export function TitleBarSubtitle({
 }: TitleBarSubtitleProps) {
   return (
     <span
-      className={`font-mono text-xs text-black/70 ${className ?? ""}`}
+      className={`font-mono text-xs opacity-70 ${className ?? ""}`}
       {...props}
     />
   );
@@ -85,15 +112,27 @@ export function TitleBarActions({ className, ...props }: TitleBarActionsProps) {
 }
 
 export interface TitleBarPositionProps
-  extends React.HTMLAttributes<HTMLSpanElement> {}
+  extends React.HTMLAttributes<HTMLSpanElement> {
+  color?: TitleBarColor;
+}
 
 export function TitleBarPosition({
   className,
+  color,
   ...props
 }: TitleBarPositionProps) {
+  const textColorClass =
+    color === "red"
+      ? "text-accent-red"
+      : color === "orange"
+        ? "text-accent-amber"
+        : color === "green"
+          ? "text-[var(--color-badge-good)]"
+          : "text-black";
+
   return (
     <span
-      className={`font-mono text-sm text-black font-bold ${className ?? ""}`}
+      className={`inline-flex items-center justify-center w-8 h-8 font-mono text-sm font-bold rounded-full bg-bg-surface ${textColorClass} ${className ?? ""}`}
       {...props}
     />
   );
@@ -108,7 +147,7 @@ export function TitleBarLanguage({
 }: TitleBarLanguageProps) {
   return (
     <span
-      className={`font-mono text-base font-bold text-black ${className ?? ""}`}
+      className={`font-mono text-base font-bold ${className ?? ""}`}
       {...props}
     />
   );

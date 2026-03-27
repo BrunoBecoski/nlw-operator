@@ -56,6 +56,19 @@ const verdictToBadgeStatus = {
   exceptional: "good" as const,
 };
 
+const severityToColor: Record<string, "red" | "orange" | "green"> = {
+  needs_serious_help: "red",
+  critical: "red",
+  warning: "orange",
+  good: "green",
+};
+
+const getScoreColor = (score: number): "red" | "orange" | "green" => {
+  if (score < 3.3) return "red";
+  if (score < 6.6) return "orange";
+  return "green";
+};
+
 type DiffLineType = "added" | "removed" | "context";
 
 function computeDiffLines(
@@ -108,27 +121,34 @@ export default async function RoastResultPage({
         <section className="flex items-center gap-12">
           <RadiationDial score={roast.score} maxScore={10} />
 
-          <div className="flex flex-col gap-4 flex-1">
-            <Badge status={badgeStatus}>verdict: {roast.verdict}</Badge>
+          <TitleBarRoot color={getScoreColor(roast.score)} className="flex-1">
+            <TitleBarHeader
+              color={getScoreColor(roast.score)}
+              className="justify-between"
+            >
+              <Badge status={badgeStatus}>verdict: {roast.verdict}</Badge>
+              <TitleBarControls />
+            </TitleBarHeader>
+            <div className="p-4 flex flex-col gap-4">
+              <p className="font-mono text-xl leading-relaxed text-text-primary">
+                {roast.roastQuote
+                  ? `"${roast.roastQuote}"`
+                  : "No quote available."}
+              </p>
 
-            <p className="font-mono text-xl leading-relaxed text-text-primary">
-              {roast.roastQuote
-                ? `"${roast.roastQuote}"`
-                : "No quote available."}
-            </p>
-
-            <div className="flex items-center gap-4">
-              <span className="font-mono text-xs text-text-tertiary">
-                lang: {roast.language}
-              </span>
-              <span className="font-mono text-xs text-text-tertiary">
-                {"·"}
-              </span>
-              <span className="font-mono text-xs text-text-tertiary">
-                {roast.lineCount} lines
-              </span>
+              <div className="flex items-center gap-4">
+                <span className="font-mono text-xs text-text-secondary">
+                  lang: {roast.language}
+                </span>
+                <span className="font-mono text-xs text-text-secondary">
+                  {"·"}
+                </span>
+                <span className="font-mono text-xs text-text-secondary">
+                  {roast.lineCount} lines
+                </span>
+              </div>
             </div>
-          </div>
+          </TitleBarRoot>
         </section>
 
         {/* Divider */}
@@ -145,8 +165,11 @@ export default async function RoastResultPage({
             </h2>
           </div>
 
-          <TitleBarRoot>
-            <TitleBarHeader className="justify-between relative">
+          <TitleBarRoot color={getScoreColor(roast.score)}>
+            <TitleBarHeader
+              color={getScoreColor(roast.score)}
+              className="justify-between relative"
+            >
               <TitleBarScore score={roast.score} />
               <div className="absolute left-1/2 -translate-x-1/2">
                 <TitleBarLanguage>{roast.language}</TitleBarLanguage>
@@ -172,22 +195,25 @@ export default async function RoastResultPage({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {roast.analysisItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex flex-col gap-3 p-5 border border-border-primary rounded-md"
-              >
-                <div className="flex items-center gap-2">
-                  <Badge status={item.severity}>{item.severity}</Badge>
-                  <h3 className="font-mono text-sm font-medium text-text-primary">
-                    {item.title}
-                  </h3>
-                </div>
-                <p className="font-mono text-xs text-text-secondary">
-                  {item.description}
-                </p>
-              </div>
-            ))}
+            {roast.analysisItems.map((item) => {
+              const color = severityToColor[item.severity] ?? "orange";
+              return (
+                <TitleBarRoot key={item.id} color={color}>
+                  <TitleBarHeader color={color} className="justify-between">
+                    <Badge status={item.severity}>{item.severity}</Badge>
+                    <TitleBarControls />
+                  </TitleBarHeader>
+                  <div className="p-4 flex flex-col gap-2">
+                    <h3 className="font-mono text-sm font-medium text-text-primary">
+                      {item.title}
+                    </h3>
+                    <p className="font-mono text-xs text-text-secondary">
+                      {item.description}
+                    </p>
+                  </div>
+                </TitleBarRoot>
+              );
+            })}
           </div>
         </section>
 

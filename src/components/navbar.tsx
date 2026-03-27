@@ -22,7 +22,7 @@ export function Navbar({ className, ...props }: NavbarProps) {
       </Link>
       <Link
         href="/leaderboard"
-        className="font-mono text-xs font-bold uppercase text-black hover:text-text-primary transition-colors px-3 py-1 hover:bg-[#3a3a3a]"
+        className="font-mono text-xs font-bold uppercase text-black hover:underline transition-colors px-3 py-1"
       >
         leaderboard
       </Link>

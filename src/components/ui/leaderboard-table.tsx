@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { tv } from "tailwind-variants";
 import { CodeShell } from "@/components/ui/code-shell";
+import type { TitleBarColor } from "@/components/ui/title-bar";
 import {
   TitleBarControls,
   TitleBarHeader,
@@ -11,6 +12,12 @@ import {
   TitleBarRoot,
   TitleBarScore,
 } from "@/components/ui/title-bar";
+
+const getScoreColor = (score: number): TitleBarColor => {
+  if (score < 3.3) return "red";
+  if (score < 6.6) return "orange";
+  return "green";
+};
 
 const leaderboardRoot = tv({
   base: "flex flex-col rounded-sm overflow-hidden",
@@ -197,34 +204,42 @@ export function LeaderboardTable({
 
   return (
     <div className="flex flex-col gap-5">
-      {items.map((item) => (
-        <LeaderboardEntryRow key={item.rank}>
-          <button
-            type="button"
-            className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
-            onClick={() => router.push(`/roast/${item.id}`)}
-          >
-            <TitleBarRoot>
-              <TitleBarHeader className="justify-between relative">
-                <div className="flex items-center gap-2">
-                  <TitleBarPosition>#{item.rank}</TitleBarPosition>
-                  <TitleBarScore score={item.score} maxScore={maxScore} />
-                </div>
-                <div className="absolute left-1/2 -translate-x-1/2">
-                  <TitleBarLanguage>
-                    {item.lang || "javascript"}
-                  </TitleBarLanguage>
-                </div>
-                <TitleBarControls />
-              </TitleBarHeader>
-              <CodeShell
-                value={item.code}
-                language={item.lang || "javascript"}
-              />
-            </TitleBarRoot>
-          </button>
-        </LeaderboardEntryRow>
-      ))}
+      {items.map((item) => {
+        const color = getScoreColor(item.score);
+        return (
+          <LeaderboardEntryRow key={item.rank}>
+            <button
+              type="button"
+              className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
+              onClick={() => router.push(`/roast/${item.id}`)}
+            >
+              <TitleBarRoot color={color}>
+                <TitleBarHeader
+                  color={color}
+                  className="justify-between relative"
+                >
+                  <div className="flex items-center gap-2">
+                    <TitleBarPosition color={color}>
+                      #{item.rank}
+                    </TitleBarPosition>
+                    <TitleBarScore score={item.score} maxScore={maxScore} />
+                  </div>
+                  <div className="absolute left-1/2 -translate-x-1/2">
+                    <TitleBarLanguage>
+                      {item.lang || "javascript"}
+                    </TitleBarLanguage>
+                  </div>
+                  <TitleBarControls />
+                </TitleBarHeader>
+                <CodeShell
+                  value={item.code}
+                  language={item.lang || "javascript"}
+                />
+              </TitleBarRoot>
+            </button>
+          </LeaderboardEntryRow>
+        );
+      })}
       {totalCount && (
         <LeaderboardFooter>
           showing top {items.length} of {totalCount} · view full leaderboard
