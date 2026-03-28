@@ -374,3 +374,75 @@ body {
 .diffline-root:last-child {
   border-bottom: none;
 }
+
+/* ============================================
+   Scrollbar - Estilo Hazmat/Yellow
+   ============================================ */
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hazmat-dark) var(--color-bg-input);
+}
+
+/* Chrome, Safari, Edge */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-input);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-hazmat-dark);
+  border-radius: 2px;
+  border: 2px solid var(--color-bg-input);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-hazmat-primary);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-bg-input);
+}
+
+/* ============================================
+   Text Styles - Padronizados
+   ============================================ */
+
+/* 1. Título/H1 - Títulos principais de página */
+.text-title {
+  font-family: var(--font-mono);
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: bold;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+/* 2. Subtítulo - Descrições abaixo do título */
+.text-subtitle {
+  font-family: var(--font-mono);
+  font-size: 1.25rem; /* text-xl */
+  font-weight: bold;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+/* 3. Comentário - Textos com // (estilo comentário de código) */
+.text-comment {
+  font-family: var(--font-mono);
+  font-size: 0.875rem; /* text-sm */
+  color: var(--color-text-tertiary);
+  line-height: 1.5;
+}
+
+/* 4. Stats - Informações de código (quantidade, nota, etc) */
+.text-stats {
+  font-family: var(--font-mono);
+  font-size: 0.875rem; /* text-sm */
+  color: var(--color-text-tertiary);
+  line-height: 1.5;
+}

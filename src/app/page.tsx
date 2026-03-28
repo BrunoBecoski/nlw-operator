@@ -18,6 +18,8 @@ import { Toggle } from "@/components/ui/toggle";
 import { useLanguageDetection } from "@/hooks/use-language-detection";
 import { useTRPC } from "@/trpc/client";
 
+const MAX_CHARS = 2000;
+
 export default function Home() {
   const [code, setCode] = useState("");
   const [roastMode, setRoastMode] = useState(true);
@@ -36,7 +38,10 @@ export default function Home() {
     }),
   );
 
-  const isDisabled = code.trim().length === 0 || createRoast.isPending;
+  const isDisabled =
+    code.trim().length === 0 ||
+    createRoast.isPending ||
+    code.length > MAX_CHARS;
 
   return (
     <div className="w-full max-w-4xl mx-auto px-10 py-16 flex flex-col gap-12">
@@ -46,13 +51,11 @@ export default function Home() {
           <span className="font-mono text-4xl font-bold text-hazmat-primary">
             &gt;
           </span>
-          <h1 className="font-mono text-4xl font-bold text-text-primary">
-            paste your code. get roasted.
-          </h1>
+          <h1 className="text-title">paste your code. get roasted.</h1>
         </div>
-        <p className="font-mono text-sm text-text-secondary">
+        <p className="text-comment">
           {
-            "// drop your code below and we'll rate it — brutally honest or full roast mode"
+            "// cole seu código abaixo e nós vamos avaliar — honestamente brutal ou modo roast completo"
           }
         </p>
       </section>
@@ -73,6 +76,7 @@ export default function Home() {
           onLanguageChange={setManualLanguage}
           detectedLanguage={detectedLanguage}
           editable
+          maxChars={MAX_CHARS}
         />
       </TitleBarRoot>
 
@@ -84,9 +88,7 @@ export default function Home() {
             onPressedChange={setRoastMode}
             label="roast mode"
           />
-          <span className="font-mono text-xs text-text-tertiary">
-            {"// maximum sarcasm enabled"}
-          </span>
+          <span className="text-comment">{"// sarcasmo máximo ativado"}</span>
         </div>
         <Button
           disabled={isDisabled}
@@ -103,23 +105,25 @@ export default function Home() {
       </section>
 
       {/* Footer Stats */}
+      <hr className="border-border-primary" />
       <StatsBar />
+      <hr className="border-border-primary" />
 
       {/* Leaderboard Preview */}
       <section className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
-          <h2 className="font-mono text-lg font-bold text-hazmat-primary">
+          <h2 className="font-mono text-4xl font-bold text-hazmat-primary">
             Top 3
           </h2>
           <Link
             href="/leaderboard"
             className="inline-flex items-center justify-center whitespace-nowrap font-mono font-bold uppercase px-6 py-2 cursor-pointer transition-all duration-100 bg-transparent text-hazmat-primary border-2 border-t-hazmat-light border-l-hazmat-light border-r-hazmat-dark border-b-hazmat-dark hover:bg-hazmat-primary/10 rounded-sm"
           >
-            view all &gt;&gt;
+            leaderboard &gt;&gt;
           </Link>
         </div>
-        <p className="font-mono text-xs text-text-tertiary">
-          {"// the worst code on the internet, ranked by shame"}
+        <p className="text-comment">
+          {"// o pior código da internet, rankeado por roasted"}
         </p>
 
         <ShameLeaderboard />

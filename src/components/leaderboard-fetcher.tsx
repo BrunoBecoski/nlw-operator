@@ -216,8 +216,7 @@ export function LeaderboardFetcher({
         </LeaderboardEntryRow>
       ))}
       <LeaderboardFooter>
-        showing top {items.length} of {totalCount} · view full leaderboard
-        &gt;&gt;
+        mostrando top {items.length} de {totalCount}
       </LeaderboardFooter>
     </div>
   );

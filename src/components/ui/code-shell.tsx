@@ -107,6 +107,80 @@ export const CodeShellHighlight = forwardRef<
 
 CodeShellHighlight.displayName = "CodeShellHighlight";
 
+export interface CodeShellFooterProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  lineCount: number;
+  charCount: number;
+  maxChars?: number;
+  showCopyButton?: boolean;
+  value?: string;
+}
+
+export function CodeShellFooter({
+  lineCount,
+  charCount,
+  maxChars,
+  showCopyButton = true,
+  value = "",
+  className,
+  ...props
+}: CodeShellFooterProps) {
+  const [copied, setCopied] = useState(false);
+  const isOverLimit = maxChars ? charCount > maxChars : false;
+  const isNearLimit = maxChars ? charCount > maxChars * 0.8 : false;
+
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!value) return;
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
+  const getCharCountDisplay = () => {
+    if (maxChars) {
+      return `${charCount.toLocaleString()}/${maxChars.toLocaleString()} caracteres`;
+    }
+    return `${charCount.toLocaleString()} caracteres`;
+  };
+
+  const getCharCountColor = () => {
+    if (isOverLimit) return "text-accent-red";
+    if (isNearLimit) return "text-accent-amber";
+    return "text-text-tertiary";
+  };
+
+  return (
+    <div
+      className={`flex items-center justify-between px-3 py-1.5 border-t border-border-primary ${className ?? ""}`}
+      style={{ backgroundColor: "var(--color-bg-surface)" }}
+      {...props}
+    >
+      <div className="flex items-center gap-4">
+        <span className="font-mono text-xs text-text-tertiary">
+          {lineCount} {lineCount === 1 ? "linha" : "linhas"}
+        </span>
+        <span className={`font-mono text-xs ${getCharCountColor()}`}>
+          {getCharCountDisplay()}
+        </span>
+      </div>
+      {showCopyButton && value && (
+        <button
+          type="button"
+          onClick={(e) => handleCopy(e)}
+          className="font-mono text-xs text-text-tertiary hover:text-hazmat-primary transition-colors cursor-pointer"
+        >
+          {copied ? "✓ copiado" : "📋 copiar"}
+        </button>
+      )}
+    </div>
+  );
+}
+
 export interface CodeShellProps {
   language?: string;
   filename?: string;
@@ -118,17 +192,21 @@ export interface CodeShellProps {
   editable?: boolean;
   onClick?: () => void;
   className?: string;
+  maxChars?: number;
+  showFooter?: boolean;
 }
 
 export function CodeShell({
   language = "javascript",
   value = "",
   onChange,
-  placeholder = "// paste your code here...",
+  placeholder = "// cole seu código aqui...",
   detectedLanguage,
   editable = false,
   onClick,
   className,
+  maxChars,
+  showFooter = true,
 }: CodeShellProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
@@ -137,6 +215,8 @@ export function CodeShell({
   const [highlightedHtml, setHighlightedHtml] = useState("");
 
   const effectiveLanguage = detectedLanguage || language;
+  const lineCount = value.split("\n").length;
+  const charCount = value.length;
 
   useEffect(() => {
     if (isReady && value) {
@@ -153,9 +233,13 @@ export function CodeShell({
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      onChange?.(e.target.value);
+      const newValue = e.target.value;
+      if (maxChars && newValue.length > maxChars) {
+        return;
+      }
+      onChange?.(newValue);
     },
-    [onChange],
+    [onChange, maxChars],
   );
 
   const displayHtml = highlightedHtml
@@ -223,6 +307,14 @@ export function CodeShell({
           </CodeShellHighlight>
         )}
       </CodeShellContent>
+      {showFooter && (
+        <CodeShellFooter
+          lineCount={lineCount}
+          charCount={charCount}
+          maxChars={maxChars}
+          value={value}
+        />
+      )}
     </CodeShellRoot>
   );
 }

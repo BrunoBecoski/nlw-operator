@@ -102,6 +102,120 @@ function getRandomCode(language: string): string {
   return faker.helpers.arrayElement(snippets);
 }
 
+function getSuggestedFix(code: string, language: string): string {
+  const fixes: Record<string, () => string> = {
+    javascript: () => {
+      if (code.includes("for(let i=0")) {
+        return `const numbers = Array.from({ length: 10 }, (_, i) => i);
+numbers.forEach((num) => console.log(num));`;
+      }
+      if (code.includes("forEach")) {
+        return `const arr = [1, 2, 3];
+arr.forEach((x) => {
+  console.log(x);
+});`;
+      }
+      if (code.includes("console.log")) {
+        return `const x = 1;
+const y = 2;
+const result = x + y;
+console.log("Result:", result);`;
+      }
+      return `function add(a: number, b: number): number {
+  return a + b;
+}`;
+    },
+    typescript: () => {
+      if (code.includes("any")) {
+        return `interface Result<T> {
+  success: boolean;
+  data?: T;
+}`;
+      }
+      if (code.includes("string")) {
+        return `function greet(name: string): string {
+  if (!name) {
+    throw new Error("Name is required");
+  }
+  return \`Hello, \${name}!\`;
+}`;
+      }
+      return code;
+    },
+    python: () => {
+      if (code.includes("range(10)")) {
+        return `def print_numbers():
+    for i in range(10):
+        print(i)
+
+if __name__ == "__main__":
+    print_numbers()`;
+      }
+      if (code.includes("=")) {
+        return `def add(a, b):
+    """Add two numbers."""
+    return a + b
+
+x = [1, 2, 3]
+y = [4, 5, 6]
+result = [a + b for a, b in zip(x, y)]`;
+      }
+      return code;
+    },
+    java: () => {
+      if (code.includes("for(int i=0")) {
+        return `for (int i = 0; i < 10; i++) {
+    System.out.println(i);
+}`;
+      }
+      if (code.includes("int x =")) {
+        return `public class Main {
+    public static void main(String[] args) {
+        final int x = 10;
+        System.out.println("Value: " + x);
+    }
+}`;
+      }
+      return code;
+    },
+    go: () => {
+      if (code.includes("func add")) {
+        return `func add(a, b int) int {
+\treturn a + b
+}
+
+func main() {
+\tresult := add(1, 2)
+\tfmt.Println(result)
+}`;
+      }
+      return code;
+    },
+    rust: () => {
+      if (code.includes("fn add")) {
+        return `fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+fn main() {
+    let result = add(2, 3);
+    println!("Result: {}", result);
+}`;
+      }
+      if (code.includes("println!")) {
+        return `fn main() {
+    let message = "Hello, World!";
+    println!("{}", message);
+}`;
+      }
+      return code;
+    },
+  };
+
+  const fixFn = fixes[language] ?? (() => code);
+  return fixFn();
+}
+
 function getVerdictFromScore(score: number): Verdict {
   if (score <= 2) return "needs_serious_help";
   if (score <= 4) return "rough_around_edges";
@@ -120,15 +234,16 @@ async function seed() {
     const score = faker.number.float({ min: 1, max: 10, fractionDigits: 1 });
     const verdict = getVerdictFromScore(score);
 
+    const originalCode = getRandomCode(language);
     roastData.push({
-      code: getRandomCode(language),
+      code: originalCode,
       language,
       lineCount: faker.number.int({ min: 1, max: 50 }),
       roastMode: faker.datatype.boolean(),
       score,
       verdict,
       roastQuote: faker.helpers.arrayElement(roastQuotes),
-      suggestedFix: `// Suggested fix for ${language} code`,
+      suggestedFix: getSuggestedFix(originalCode, language),
     });
   }
 

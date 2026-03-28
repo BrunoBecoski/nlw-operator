@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { CodeShell } from "@/components/ui/code-shell";
-import { DiffLine, DiffLineContainer } from "@/components/ui/diff-line";
 import { RadiationDial } from "@/components/ui/radiation-dial";
 import {
   TitleBarControls,
@@ -9,9 +8,9 @@ import {
   TitleBarLanguage,
   TitleBarRoot,
   TitleBarScore,
-  TitleBarTitle,
 } from "@/components/ui/title-bar";
 import { caller } from "@/trpc/server";
+import { SuggestedFix } from "./suggested-fix";
 
 export async function generateMetadata({
   params,
@@ -69,37 +68,6 @@ const getScoreColor = (score: number): "red" | "orange" | "green" => {
   return "green";
 };
 
-type DiffLineType = "added" | "removed" | "context";
-
-function computeDiffLines(
-  original: string,
-  suggested: string,
-): Array<{ type: DiffLineType; content: string }> {
-  const originalLines = original.split("\n");
-  const suggestedLines = suggested.split("\n");
-  const lines: Array<{ type: DiffLineType; content: string }> = [];
-
-  const maxLen = Math.max(originalLines.length, suggestedLines.length);
-
-  for (let i = 0; i < maxLen; i++) {
-    const orig = originalLines[i];
-    const sugg = suggestedLines[i];
-
-    if (orig === sugg) {
-      lines.push({ type: "context", content: orig ?? "" });
-    } else {
-      if (orig !== undefined) {
-        lines.push({ type: "removed", content: orig });
-      }
-      if (sugg !== undefined) {
-        lines.push({ type: "added", content: sugg });
-      }
-    }
-  }
-
-  return lines;
-}
-
 export default async function RoastResultPage({
   params,
 }: {
@@ -110,15 +78,12 @@ export default async function RoastResultPage({
   const roast = await trpcCaller.roast.getById({ id });
 
   const badgeStatus = verdictToBadgeStatus[roast.verdict];
-  const diffLines = roast.suggestedFix
-    ? computeDiffLines(roast.code, roast.suggestedFix)
-    : [];
 
   return (
     <main className="flex flex-col w-full">
-      <div className="flex flex-col gap-10 w-full max-w-6xl mx-auto px-10 md:px-20 py-10">
+      <div className="flex flex-col gap-10 w-full max-w-6xl mx-auto px-10 py-16">
         {/* Score Hero */}
-        <section className="flex items-center gap-12">
+        <section className="flex items-center justify-center gap-12">
           <RadiationDial score={roast.score} maxScore={10} />
 
           <TitleBarRoot color={getScoreColor(roast.score)} className="flex-1">
@@ -130,22 +95,16 @@ export default async function RoastResultPage({
               <TitleBarControls />
             </TitleBarHeader>
             <div className="p-4 flex flex-col gap-4">
-              <p className="font-mono text-xl leading-relaxed text-text-primary">
+              <p className="text-subtitle">
                 {roast.roastQuote
                   ? `"${roast.roastQuote}"`
                   : "No quote available."}
               </p>
 
-              <div className="flex items-center gap-4">
-                <span className="font-mono text-xs text-text-secondary">
-                  lang: {roast.language}
-                </span>
-                <span className="font-mono text-xs text-text-secondary">
-                  {"·"}
-                </span>
-                <span className="font-mono text-xs text-text-secondary">
-                  {roast.lineCount} lines
-                </span>
+              <div className="flex items-center gap-4 text-stats">
+                <span>lang: {roast.language}</span>
+                <span>{"·"}</span>
+                <span>{roast.lineCount} lines</span>
               </div>
             </div>
           </TitleBarRoot>
@@ -156,13 +115,16 @@ export default async function RoastResultPage({
 
         {/* Submitted Code Section */}
         <section className="flex flex-col gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-sm font-bold text-hazmat-primary">
-              {"//"}
-            </span>
-            <h2 className="font-mono text-sm font-bold text-text-primary">
-              your_submission
-            </h2>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xl font-bold text-hazmat-primary">
+                &gt;
+              </span>
+              <h2 className="text-subtitle">your submission</h2>
+            </div>
+            <p className="text-comment">
+              {"// o código que você enviou para ser roastado"}
+            </p>
           </div>
 
           <TitleBarRoot color={getScoreColor(roast.score)}>
@@ -185,13 +147,14 @@ export default async function RoastResultPage({
 
         {/* Detailed Analysis Section */}
         <section className="flex flex-col gap-6">
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-sm font-bold text-hazmat-primary">
-              {"//"}
-            </span>
-            <h2 className="font-mono text-sm font-bold text-text-primary">
-              detailed_analysis
-            </h2>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xl font-bold text-hazmat-primary">
+                &gt;
+              </span>
+              <h2 className="text-subtitle">detailed analysis</h2>
+            </div>
+            <p className="text-comment">{"// onde você errou feio"}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -218,37 +181,16 @@ export default async function RoastResultPage({
         </section>
 
         {/* Suggested Fix Section */}
-        {diffLines.length > 0 && (
+        {roast.suggestedFix && (
           <>
             {/* Divider */}
             <hr className="border-border-primary" />
 
-            <section className="flex flex-col gap-6">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-sm font-bold text-hazmat-primary">
-                  {"//"}
-                </span>
-                <h2 className="font-mono text-sm font-bold text-text-primary">
-                  suggested_fix
-                </h2>
-              </div>
-
-              <TitleBarRoot>
-                <TitleBarHeader className="justify-between relative">
-                  <TitleBarTitle>
-                    your_code.{roast.language} → improved_code.{roast.language}
-                  </TitleBarTitle>
-                  <TitleBarControls />
-                </TitleBarHeader>
-                <DiffLineContainer>
-                  {diffLines.map((line, i) => (
-                    <DiffLine key={`diff-${i.toString()}`} type={line.type}>
-                      {line.content}
-                    </DiffLine>
-                  ))}
-                </DiffLineContainer>
-              </TitleBarRoot>
-            </section>
+            <SuggestedFix
+              suggestedFix={roast.suggestedFix}
+              originalCode={roast.code}
+              language={roast.language}
+            />
           </>
         )}
       </div>
