@@ -48,15 +48,15 @@ export async function generateMetadata({
 }
 
 const verdictToBadgeStatus = {
-  needs_serious_help: "needs_serious_help" as const,
-  rough_around_edges: "critical" as const,
-  decent_code: "warning" as const,
-  solid_work: "good" as const,
-  exceptional: "good" as const,
+  critical_contamination: "critical" as const,
+  moderate_radiation: "critical" as const,
+  containment_achieved: "warning" as const,
+  low_radiation: "good" as const,
+  radiation_free: "good" as const,
 };
 
 const severityToColor: Record<string, "red" | "orange" | "green"> = {
-  needs_serious_help: "red",
+  critical_contamination: "red",
   critical: "red",
   warning: "orange",
   good: "green",

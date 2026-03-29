@@ -364,7 +364,7 @@ function HomeEditor() {
             })
           }
         >
-          {createRoast.isPending ? "$ roasting..." : "$ roast_my_code"}
+          {createRoast.isPending ? "$ roasting..." : "roast my code"}
         </Button>
       </div>
     </div>
@@ -608,7 +608,7 @@ Expected: Compiles. The page is now dynamic (server-rendered on demand) since it
 **Step 3: Test manually**
 
 1. Run `pnpm dev`
-2. Paste code in the editor, click "roast_my_code"
+2. Paste code in the editor, click "roast my code"
 3. Wait for redirect to `/roast/[id]`
 4. Verify: score ring, verdict badge, quote, submitted code, analysis cards, suggested fix diff
 

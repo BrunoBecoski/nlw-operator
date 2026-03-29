@@ -11,7 +11,7 @@ import { CodeShell } from "@/components/ui/code-shell";
 import {
   TitleBarControls,
   TitleBarHeader,
-  TitleBarLanguage,
+  TitleBarLanguageSelect,
   TitleBarRoot,
 } from "@/components/ui/title-bar";
 import { Toggle } from "@/components/ui/toggle";
@@ -24,6 +24,7 @@ export default function Home() {
   const [code, setCode] = useState("");
   const [roastMode, setRoastMode] = useState(true);
   const [manualLanguage, setManualLanguage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { detectedLanguage } = useLanguageDetection(code);
 
   const resolvedLanguage = manualLanguage ?? detectedLanguage ?? "javascript";
@@ -33,7 +34,15 @@ export default function Home() {
   const createRoast = useMutation(
     trpc.roast.create.mutationOptions({
       onSuccess(data) {
+        setErrorMessage(null);
         router.push(`/roast/${data.id}`);
+      },
+      onError: (error) => {
+        if (error.data?.code === "TOO_MANY_REQUESTS") {
+          setErrorMessage("API quota exceeded. Please try again later.");
+        } else {
+          setErrorMessage(error.message || "Something went wrong. Try again.");
+        }
       },
     }),
   );
@@ -61,24 +70,29 @@ export default function Home() {
       </section>
 
       {/* Code Editor */}
-      <TitleBarRoot>
-        <TitleBarHeader className="justify-between relative">
-          <div />
-          <div className="absolute left-1/2 -translate-x-1/2">
-            <TitleBarLanguage>{resolvedLanguage}</TitleBarLanguage>
-          </div>
-          <TitleBarControls />
-        </TitleBarHeader>
-        <CodeShell
-          value={code}
-          onChange={setCode}
-          language={resolvedLanguage}
-          onLanguageChange={setManualLanguage}
-          detectedLanguage={detectedLanguage}
-          editable
-          maxChars={MAX_CHARS}
-        />
-      </TitleBarRoot>
+      <div className="relative">
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10">
+          <TitleBarLanguageSelect
+            value={resolvedLanguage}
+            onChange={setManualLanguage}
+            detectedLanguage={detectedLanguage}
+          />
+        </div>
+        <TitleBarRoot>
+          <TitleBarHeader className="justify-end relative">
+            <TitleBarControls />
+          </TitleBarHeader>
+          <CodeShell
+            value={code}
+            onChange={setCode}
+            language={resolvedLanguage}
+            onLanguageChange={setManualLanguage}
+            detectedLanguage={detectedLanguage}
+            editable
+            maxChars={MAX_CHARS}
+          />
+        </TitleBarRoot>
+      </div>
 
       {/* Actions Bar */}
       <section className="flex items-center justify-between">
@@ -100,9 +114,18 @@ export default function Home() {
             })
           }
         >
-          {createRoast.isPending ? "$ roasting..." : "$ roast_my_code"}
+          {createRoast.isPending ? "$ roasting..." : "roast my code"}
         </Button>
       </section>
+
+      {/* Error Message */}
+      {errorMessage && (
+        <section className="p-4 bg-accent-red/10 border border-accent-red rounded-sm">
+          <p className="font-mono text-sm text-accent-red">
+            ERROR: {errorMessage}
+          </p>
+        </section>
+      )}
 
       {/* Footer Stats */}
       <hr className="border-border-primary" />

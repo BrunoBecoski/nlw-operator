@@ -1,7 +1,30 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { tv } from "tailwind-variants";
 import { RadiationDialSm } from "./radiation-dial";
+
+const SUPPORTED_LANGUAGES = [
+  "javascript",
+  "typescript",
+  "python",
+  "go",
+  "rust",
+  "java",
+  "ruby",
+  "php",
+  "swift",
+  "kotlin",
+  "c",
+  "cpp",
+  "html",
+  "css",
+  "json",
+  "yaml",
+  "sql",
+  "bash",
+  "markdown",
+];
 
 export type TitleBarColor = "hazmat" | "red" | "orange" | "green";
 
@@ -150,6 +173,96 @@ export function TitleBarLanguage({
       className={`font-mono text-base font-bold ${className ?? ""}`}
       {...props}
     />
+  );
+}
+
+export interface TitleBarLanguageSelectProps {
+  value: string;
+  onChange: (language: string) => void;
+  detectedLanguage?: string | null;
+  className?: string;
+}
+
+export function TitleBarLanguageSelect({
+  value,
+  onChange,
+  detectedLanguage,
+  className,
+}: TitleBarLanguageSelectProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const isAutoDetected = !value || detectedLanguage === value;
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className={`relative ${className ?? ""}`} ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-1 font-mono text-base font-bold hover:opacity-80 transition-opacity cursor-pointer"
+        aria-label="Select language"
+      >
+        <span>{value}</span>
+        {isAutoDetected && detectedLanguage && (
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="opacity-60"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+          </svg>
+        )}
+        <svg
+          width="10"
+          height="10"
+          viewBox="0 0 12 12"
+          fill="currentColor"
+          className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+          aria-hidden="true"
+        >
+          <path d="M2 4l4 4 4-4" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-[100] min-w-[120px] bg-bg-surface border border-border-primary rounded-sm shadow-lg max-h-[200px] overflow-y-auto pointer-events-auto">
+          {SUPPORTED_LANGUAGES.map((lang) => (
+            <button
+              key={lang}
+              type="button"
+              onClick={() => {
+                onChange(lang);
+                setIsOpen(false);
+              }}
+              className={`w-full text-left px-3 py-1.5 font-mono text-sm hover:bg-hazmat-primary/20 transition-colors cursor-pointer ${
+                lang === value ? "bg-hazmat-primary/30 text-hazmat-primary" : ""
+              }`}
+            >
+              {lang}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

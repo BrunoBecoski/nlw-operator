@@ -12,11 +12,11 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const verdictEnum = pgEnum("verdict", [
-  "needs_serious_help",
-  "rough_around_edges",
-  "decent_code",
-  "solid_work",
-  "exceptional",
+  "critical_contamination",
+  "moderate_radiation",
+  "containment_achieved",
+  "low_radiation",
+  "radiation_free",
 ]);
 
 export const severityEnum = pgEnum("severity", ["critical", "warning", "good"]);

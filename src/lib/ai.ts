@@ -6,11 +6,11 @@ export const model = google("gemini-2.0-flash");
 export const roastOutputSchema = z.object({
   score: z.number().min(0).max(10),
   verdict: z.enum([
-    "needs_serious_help",
-    "rough_around_edges",
-    "decent_code",
-    "solid_work",
-    "exceptional",
+    "critical_contamination",
+    "moderate_radiation",
+    "containment_achieved",
+    "low_radiation",
+    "radiation_free",
   ]),
   roastQuote: z.string(),
   analysisItems: z.array(
@@ -26,20 +26,20 @@ export const roastOutputSchema = z.object({
 export type RoastOutput = z.infer<typeof roastOutputSchema>;
 
 export function getSystemPrompt(roastMode: boolean): string {
-  const base = `You are an expert code reviewer. Analyze the submitted code and provide a structured review.
+  const base = `You are an expert radiation specialist. Analyze the submitted code and provide a structured radiation report.
 
 Rules:
-- Score from 0.0 to 10.0 (one decimal place). 0 = catastrophic, 10 = flawless.
+- Score from 0.0 to 10.0 (one decimal place). 0 = nuclear meltdown, 10 = radiation free.
 - Pick the verdict that matches the score:
-  - 0-2: "needs_serious_help"
-  - 2.1-4: "rough_around_edges"
-  - 4.1-6: "decent_code"
-  - 6.1-8: "solid_work"
-  - 8.1-10: "exceptional"
+  - 0-2: "critical_contamination"
+  - 2.1-4: "moderate_radiation"
+  - 4.1-6: "containment_achieved"
+  - 6.1-8: "low_radiation"
+  - 8.1-10: "radiation_free"
 - Generate 3-6 analysis items ordered by severity (critical first, then warning, then good).
   - Each item has a severity ("critical", "warning", or "good"), a short title, and a 1-2 sentence description.
 - Generate a suggestedFix: the complete improved/corrected version of the submitted code. Keep the same language and intent but fix the issues you identified.
-- The roastQuote is a one-liner summary of the code quality.`;
+- The roastQuote is a one-liner summary of the contamination level.`;
 
   if (roastMode) {
     return `${base}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useQueries } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CodeShell } from "@/components/ui/code-shell";
 import {
@@ -49,7 +48,6 @@ function CodePreview({
   score?: number;
   id: string;
 }) {
-  const router = useRouter();
   const lines = code.split("\n");
   const isLongCode = lines.length > MAX_PREVIEW_LINES;
   const [isOpen, setIsOpen] = useState(false);
@@ -59,10 +57,9 @@ function CodePreview({
   if (!isLongCode) {
     const color = getScoreColor(score ?? 0);
     return (
-      <button
-        type="button"
-        className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
-        onClick={() => router.push(`/roast/${id}`)}
+      <a
+        href={`/roast/${id}`}
+        className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity block"
       >
         <TitleBarRoot color={color}>
           <TitleBarHeader color={color} className="justify-between relative">
@@ -77,7 +74,7 @@ function CodePreview({
           </TitleBarHeader>
           <CodeShell value={code} language={lang} />
         </TitleBarRoot>
-      </button>
+      </a>
     );
   }
 
@@ -85,10 +82,9 @@ function CodePreview({
     const color = getScoreColor(score ?? 0);
     return (
       <div>
-        <button
-          type="button"
-          className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
-          onClick={() => router.push(`/roast/${id}`)}
+        <a
+          href={`/roast/${id}`}
+          className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity block"
         >
           <TitleBarRoot color={color}>
             <TitleBarHeader color={color} className="justify-between relative">
@@ -103,7 +99,7 @@ function CodePreview({
             </TitleBarHeader>
             <CodeShell value={code} language={lang} />
           </TitleBarRoot>
-        </button>
+        </a>
         <button
           type="button"
           onClick={(e) => {
@@ -120,10 +116,9 @@ function CodePreview({
 
   return (
     <div>
-      <button
-        type="button"
-        className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
-        onClick={() => router.push(`/roast/${id}`)}
+      <a
+        href={`/roast/${id}`}
+        className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity block"
       >
         <TitleBarRoot color={getScoreColor(score ?? 0)}>
           <TitleBarHeader
@@ -143,7 +138,7 @@ function CodePreview({
           </TitleBarHeader>
           <CodeShell value={previewCode} language={lang} />
         </TitleBarRoot>
-      </button>
+      </a>
       <button
         type="button"
         onClick={(e) => {

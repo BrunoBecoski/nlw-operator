@@ -2,6 +2,13 @@ import { faker } from "@faker-js/faker";
 import { db } from "./index";
 import { analysisItems, roasts } from "./schema";
 
+async function clearDatabase() {
+  console.log("☢️  Clearing database...");
+  await db.delete(analysisItems);
+  await db.delete(roasts);
+  console.log("✅ Database cleared");
+}
+
 const languages = [
   "javascript",
   "typescript",
@@ -51,49 +58,49 @@ const sampleCodeSnippets: Record<string, string[]> = {
   ],
 };
 
-const roastQuotes = [
-  "I've seen better code in a fortune cookie",
-  "This code is so bad it could crash a quantum computer",
-  "My grandmother codes better than this",
-  "This is why we can't have nice things",
-  "Did you write this at 3am on a Tuesday?",
-  "The linter is crying right now",
-  "This belongs in a museum of bad decisions",
-  "Even my pet goldfish is disappointed",
-  "This is technically legal code, so there's that",
-  "Stack Overflow called, they want their copy-paste back",
+const radiationQuotes = [
+  "This code is more radioactive than Chernobyl after the cleanup",
+  "Your variable names are leaking radiation everywhere",
+  "Even Geiger counters are afraid of this code",
+  "This is a nuclear meltdown waiting to happen",
+  "The hazmat team has been dispatched to your codebase",
+  "Warning: Extreme contamination levels detected",
+  "This code requires Level 5 containment protocols",
+  "The code review room needs to be evacuated",
+  "Your indentation is worse than Three Mile Island",
+  "Even the EPA would classify this as hazardous waste",
 ];
 
 const analysisTitles = {
   critical: [
-    "No error handling",
-    "SQL injection vulnerability",
-    "Memory leak detected",
-    "Deprecated function usage",
-    "Security risk found",
+    "Critical radiation leak detected",
+    "Unshielded security vulnerability",
+    "Memory contamination imminent",
+    "Deprecated reactor core usage",
+    "Nuclear waste disposal violation",
   ],
   warning: [
-    "Missing type annotations",
-    "Consider using const instead of var",
-    "Function too long",
-    "Magic numbers detected",
-    "Duplicated code block",
+    "Radiation levels approaching threshold",
+    "Consider using shielded containers",
+    "Core meltdown potential detected",
+    "Unstable isotope count high",
+    "Cross-contamination risk",
   ],
   good: [
-    "Good naming convention",
-    "Proper error handling",
-    "Clean separation of concerns",
-    "Efficient algorithm choice",
-    "Well-documented function",
+    "Proper hazmat protocols followed",
+    "Clean containment achieved",
+    "Efficient shielding implementation",
+    "Stable isotope structure",
+    "Radiation levels within safe limits",
   ],
 };
 
 type Verdict =
-  | "needs_serious_help"
-  | "rough_around_edges"
-  | "decent_code"
-  | "solid_work"
-  | "exceptional";
+  | "critical_contamination"
+  | "moderate_radiation"
+  | "containment_achieved"
+  | "low_radiation"
+  | "radiation_free";
 type Severity = "critical" | "warning" | "good";
 
 function getRandomCode(language: string): string {
@@ -217,15 +224,17 @@ fn main() {
 }
 
 function getVerdictFromScore(score: number): Verdict {
-  if (score <= 2) return "needs_serious_help";
-  if (score <= 4) return "rough_around_edges";
-  if (score <= 6) return "decent_code";
-  if (score <= 8) return "solid_work";
-  return "exceptional";
+  if (score <= 2) return "critical_contamination";
+  if (score <= 4) return "moderate_radiation";
+  if (score <= 6) return "containment_achieved";
+  if (score <= 8) return "low_radiation";
+  return "radiation_free";
 }
 
 async function seed() {
-  console.log("🌱 Seeding database...");
+  console.log("☢️  Seeding database...");
+
+  await clearDatabase();
 
   const roastData: (typeof roasts.$inferInsert)[] = [];
 
@@ -242,7 +251,7 @@ async function seed() {
       roastMode: faker.datatype.boolean(),
       score,
       verdict,
-      roastQuote: faker.helpers.arrayElement(roastQuotes),
+      roastQuote: faker.helpers.arrayElement(radiationQuotes),
       suggestedFix: getSuggestedFix(originalCode, language),
     });
   }

@@ -7,7 +7,7 @@ import { analysisItems, roasts } from "@/db/schema";
 import { getSystemPrompt, roastOutputSchema } from "@/lib/ai";
 import { baseProcedure, createTRPCRouter } from "../init";
 
-const model = google("gemini-2.0-flash");
+const model = google("gemini-3.1-flash-lite-preview");
 
 export const roastRouter = createTRPCRouter({
   getStats: baseProcedure.query(async ({ ctx }) => {
@@ -33,14 +33,36 @@ export const roastRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { output } = await generateText({
-        model,
-        output: Output.object({
-          schema: roastOutputSchema,
-        }),
-        system: getSystemPrompt(input.roastMode),
-        prompt: `Language: ${input.language}\n\nCode:\n${input.code}`,
-      });
+      let output: (typeof roastOutputSchema)["_output"] | undefined;
+      try {
+        const result = await generateText({
+          model,
+          maxRetries: 0,
+          output: Output.object({
+            schema: roastOutputSchema,
+          }),
+          system: getSystemPrompt(input.roastMode),
+          prompt: `Language: ${input.language}\n\nCode:\n${input.code}`,
+        });
+        output = result.output;
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Unknown error";
+        if (
+          message.includes("quota") ||
+          message.includes("rate limit") ||
+          message.includes("TooManyRequests")
+        ) {
+          throw new TRPCError({
+            code: "TOO_MANY_REQUESTS",
+            message: "API quota exceeded. Please try again later.",
+          });
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "AI failed to generate a response",
+        });
+      }
 
       if (!output) {
         throw new TRPCError({

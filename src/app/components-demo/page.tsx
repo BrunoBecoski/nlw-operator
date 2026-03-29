@@ -59,7 +59,16 @@ function CodePreview({ code, lang }: { code: string; lang: string }) {
   );
 }
 
-const statuses = ["critical", "warning", "good", "needs_serious_help"] as const;
+const statuses = [
+  "critical",
+  "warning",
+  "good",
+  "critical_contamination",
+  "moderate_radiation",
+  "containment_achieved",
+  "low_radiation",
+  "radiation_free",
+] as const;
 
 const sampleCode = `function calculateTotal(items) {
   var total = 0;

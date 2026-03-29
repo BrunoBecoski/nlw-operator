@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { tv } from "tailwind-variants";
 import { CodeShell } from "@/components/ui/code-shell";
 import type { TitleBarColor } from "@/components/ui/title-bar";
@@ -127,21 +126,31 @@ const leaderboardEntryRow = tv({
 });
 
 export interface LeaderboardEntryRowProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  as?: "div" | "a";
+  href?: string;
+}
 
 export function LeaderboardEntryRow({
   className,
   children,
+  as = "div",
+  href,
   ...props
 }: LeaderboardEntryRowProps) {
+  const rowClasses = leaderboardEntryRow({ className });
+  const baseStyle = { borderColor: "var(--color-border-primary)" };
+
+  if (as === "a" && href) {
+    return (
+      <a href={href} className={rowClasses} style={baseStyle}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <div
-      className={leaderboardEntryRow({ className })}
-      style={{
-        borderColor: "var(--color-border-primary)",
-      }}
-      {...props}
-    >
+    <div className={rowClasses} style={baseStyle} {...props}>
       {children}
     </div>
   );
@@ -200,43 +209,40 @@ export function LeaderboardTable({
   maxScore = 10,
   totalCount,
 }: LeaderboardTableProps) {
-  const router = useRouter();
-
   return (
     <div className="flex flex-col gap-5">
       {items.map((item) => {
         const color = getScoreColor(item.score);
         return (
-          <LeaderboardEntryRow key={item.rank}>
-            <button
-              type="button"
-              className="w-full text-left cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => router.push(`/roast/${item.id}`)}
-            >
-              <TitleBarRoot color={color}>
-                <TitleBarHeader
-                  color={color}
-                  className="justify-between relative"
-                >
-                  <div className="flex items-center gap-2">
-                    <TitleBarPosition color={color}>
-                      #{item.rank}
-                    </TitleBarPosition>
-                    <TitleBarScore score={item.score} maxScore={maxScore} />
-                  </div>
-                  <div className="absolute left-1/2 -translate-x-1/2">
-                    <TitleBarLanguage>
-                      {item.lang || "javascript"}
-                    </TitleBarLanguage>
-                  </div>
-                  <TitleBarControls />
-                </TitleBarHeader>
-                <CodeShell
-                  value={item.code}
-                  language={item.lang || "javascript"}
-                />
-              </TitleBarRoot>
-            </button>
+          <LeaderboardEntryRow
+            key={item.rank}
+            as="a"
+            href={`/roast/${item.id}`}
+            className="cursor-pointer hover:opacity-90 transition-opacity"
+          >
+            <TitleBarRoot color={color}>
+              <TitleBarHeader
+                color={color}
+                className="justify-between relative"
+              >
+                <div className="flex items-center gap-2">
+                  <TitleBarPosition color={color}>
+                    #{item.rank}
+                  </TitleBarPosition>
+                  <TitleBarScore score={item.score} maxScore={maxScore} />
+                </div>
+                <div className="absolute left-1/2 -translate-x-1/2">
+                  <TitleBarLanguage>
+                    {item.lang || "javascript"}
+                  </TitleBarLanguage>
+                </div>
+                <TitleBarControls />
+              </TitleBarHeader>
+              <CodeShell
+                value={item.code}
+                language={item.lang || "javascript"}
+              />
+            </TitleBarRoot>
           </LeaderboardEntryRow>
         );
       })}

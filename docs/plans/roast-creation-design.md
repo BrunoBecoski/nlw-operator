@@ -7,7 +7,7 @@ Allow users to paste code, optionally enable "roast mode" for sarcasm, and get a
 ## Flow
 
 ```
-User clicks "roast_my_code"
+User clicks "roast my code"
   -> Client: useMutation(trpc.roast.create)
   -> Server (tRPC mutation):
     1. Validate input (code, language, roastMode)
