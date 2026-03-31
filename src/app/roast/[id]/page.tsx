@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { CodeShell } from "@/components/ui/code-shell";
 import { RadiationDial } from "@/components/ui/radiation-dial";
@@ -19,7 +20,18 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const callerInstance = await caller();
-  const roast = await callerInstance.roast.getById({ id });
+
+  let roast: Awaited<ReturnType<typeof callerInstance.roast.getById>> | null =
+    null;
+  try {
+    roast = await callerInstance.roast.getById({ id });
+  } catch {
+    return { title: "DevRoast" };
+  }
+
+  if (!roast) {
+    return { title: "DevRoast" };
+  }
 
   const title = `${roast.score}/10 — ${roast.language} Roast — DevRoast`;
   const description =
@@ -75,7 +87,17 @@ export default async function RoastResultPage({
 }) {
   const { id } = await params;
   const trpcCaller = await caller();
-  const roast = await trpcCaller.roast.getById({ id });
+
+  let roast: Awaited<ReturnType<typeof trpcCaller.roast.getById>> | null = null;
+  try {
+    roast = await trpcCaller.roast.getById({ id });
+  } catch {
+    redirect("/");
+  }
+
+  if (!roast) {
+    redirect("/");
+  }
 
   const badgeStatus = verdictToBadgeStatus[roast.verdict];
 

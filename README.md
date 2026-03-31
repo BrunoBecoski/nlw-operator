@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1 align="center">☢️ DevRoast</h1>
 
-## Getting Started
+Coloque qualquer trecho de código na zona de contaminação. Ative o **roast mode** para sarcasmo nuclear máximo. Descubra o nível de radiação do seu código — de `radiation_free` até `critical_contamination`.
 
-First, run the development server:
+> ☢️ Construído durante o NLW da Rocketseat, ao longo das aulas do evento.
+
+## Screenshots
+
+<div align="center">
+  <p style="font-size: 1.5em;"><strong>Home</strong></p>
+  <img src=".github/images/home.png"/>
+  <p align="center"><code>// page.tsx — input para colar o código</code></p>
+  <br/>
+  <p style="font-size: 1.5em;"><strong>Leaderboard</strong></p>
+  <img src=".github/images/leaderboard.png"/>
+  <p align="center"><code>// leaderboard.tsx — vergonha alheia em tempo real</code></p>
+  <br/>
+  <p style="font-size: 1.5em;"><strong>Roast</strong></p>
+  <img src=".github/images/roast.png"/>
+  <p align="center"><code>// roast/[id]/page.tsx — o diagnóstico completo do seu código</code></p>
+</div>
+
+## Funcionalidades
+
+- Cole seu código e receba uma análise com IA
+- Verifique seu score de 1 a 10
+- Veja os piores códigos no leaderboard
+- Suporte a múltiplas linguagens
+
+## Setup Local
 
 ```bash
+# Clone o repositório
+git clone <repo-url>
+cd nlw-operator
+
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env.local
+
+# Execute o servidor de desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variáveis de Ambiente
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Crie um arquivo `.env.local` na raiz do projeto com as seguintes variáveis:
 
-## Learn More
+```bash
+# URL do banco de dados PostgreSQL
+DATABASE_URL=
 
-To learn more about Next.js, take a look at the following resources:
+# Chave da API do Google (para Gemini AI)
+GOOGLE_API_KEY=
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# URL da aplicação (opcional, para produção)
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tecnologias
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 16
+- React 19
+- TypeScript
+- tRPC v11
+- Drizzle ORM
+- PostgreSQL
+- Tailwind CSS v4
+- Shiki (destaque de sintaxe)
+- Gemini AI (análise de código)
